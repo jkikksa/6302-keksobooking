@@ -6,6 +6,12 @@ var getRandomElement = function (array) {
   return array[getRandomInt(0, array.length - 1)];
 }
 
+var removeChildsFromCollection = function(collection) {
+  while (collection.firstChild) {
+    collection.removeChild(collection.firstChild);
+  };
+};
+
 var generateObj = function (imageURL) {
 
   var obj = {
@@ -29,8 +35,8 @@ var generateObj = function (imageURL) {
     },
 
     'location': {
-      'x': 1,
-      'y': 1
+      'x': getRandomInt(300, 900),
+      'y': getRandomInt(100, 500)
     }
   };
 
@@ -38,16 +44,42 @@ var generateObj = function (imageURL) {
 };
 
 var generateArr = function() {
-  var arr = [];
+  var array = [];
 
   for (var i = 0; i < 8; i++) {
-    var imageURL = 'img/avatars/user' + '0' + (i + 1) + '.jpg';
-    arr.push(generateObj(imageURL));
+    var imageURL = 'img/avatars/user' + '0' + (i + 1) + '.png';
+    array.push(generateObj(imageURL));
   }
 
-  return arr;
+  return array;
+};
+
+var arr = generateArr();
+var pin = document.querySelector('.tokyo__pin-map');
+var template = document.querySelector('#lodge-template');
+var dialog = document.querySelector('#offer-dialog');
+
+for (var i = 0; i < arr.length; i++) {
+  var div = document.createElement('div');
+  var img = document.createElement('img');
+  div.className = 'pin';
+  var offsetX = div.offsetWidth / 2;
+  var offsetY = div.offsetHeight
+  div.style.left = arr[i].location.x - offsetX + 'px';
+  div.style.top = arr[i].location.y - offsetY + 'px';
+  img.src =  arr[i].author.avatar;
+  div.appendChild(img);
+  pin.appendChild(div);
 }
-console.log(generateArr());
+
+var element = template.content.cloneNode(true);
+var title = element.querySelector('.lodge__title');
+  title.textContent = arr[i].offer.title;
+
+removeChildsFromCollection(dialog);
+dialog.appendChild(element);
+
+// console.log(generateArr());
 
 // console.log(generateObj());
 
