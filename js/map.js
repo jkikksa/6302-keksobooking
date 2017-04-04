@@ -66,39 +66,36 @@ var getRandomArrayItem = function (array) {
 
 /**
  * Get a random unique item from an array
- * @param  {Array} array
- * @return {*}
+ * @param {Array} array
+ * @return {Function}
  */
 var getRandomUniqueItem = function (array) {
-  var newArray = [];
-
-  for (var i = 0; i < array.length; i++) {
-    newArray[i] = array[i];
-  }
+  var newArray = array.slice();
 
   return function () {
     return newArray.splice(getRandomInt(0, newArray.length - 1), 1);
   };
 };
 
-var getRandomNumbers = getRandomUniqueItem(NUMBERS);
-var getRandomTitles = getRandomUniqueItem(TITLES);
+/**
+ * @return {number}
+ */
+var getRandomNumber = getRandomUniqueItem(NUMBERS);
+
+/**
+ * @return {string}
+ */
+var getRandomTitle = getRandomUniqueItem(TITLES);
 
 /**
  * Get a new random length array from the recieved array
- * @param  {Array} array
+ * @param {Array} array
  * @return {Array}
  */
 var getRandomArray = function (array) {
   return array.filter(function () {
-    return getRandomInt(0, 1);
+    return getRandomInt(0, 1) === 0;
   });
-};
-
-var removeChildsFromCollection = function (collection) {
-  while (collection.firstChild) {
-    collection.removeChild(collection.firstChild);
-  }
 };
 
 /**
@@ -108,7 +105,7 @@ var removeChildsFromCollection = function (collection) {
 var generateAdvert = function () {
   var advert = {
     'author': {
-      'avatar': 'img/avatars/user' + getRandomNumbers() + '.png'
+      'avatar': 'img/avatars/user' + getRandomNumber() + '.png'
     },
 
     'location': {
@@ -118,8 +115,8 @@ var generateAdvert = function () {
   };
 
   advert.offer = {
-    'title': getRandomTitles(),
-    'address': advert.location.x + ' ' + advert.location.y,
+    'title': getRandomTitle(),
+    'address': advert.location.x + ',' + advert.location.y,
     'price': getRandomInt(1000, 1000000),
     'type': getRandomArrayItem(OFFER_TYPES),
     'rooms': getRandomInt(1, 5),
@@ -136,12 +133,13 @@ var generateAdvert = function () {
 
 /**
  * Create an advert list
+ * @param {number} avdertsAmount Amount of adverts
  * @return {Array<Object>}
  */
-var generateAdvertsList = function () {
+var generateAdvertsList = function (avdertsAmount) {
   var advertsList = [];
 
-  for (var i = 0; i < 8; i++) {
+  for (var i = 0; i < avdertsAmount; i++) {
     advertsList.push(generateAdvert());
   }
 
@@ -150,20 +148,23 @@ var generateAdvertsList = function () {
 
 /**
  * Creates a pin based on the object parameters
- * @param  {Object} advert
+ * @param {Object} advert
  * @return {Element}
  */
 var generatePin = function (advert) {
   var pin = document.createElement('div');
   var img = document.createElement('img');
-  pin.className = 'pin';
-  var offsetX = pin.offsetWidth / 2;
-  var offsetY = pin.offsetHeight;
-  pin.style.left = advert.location.x - offsetX + 'px';
-  pin.style.top = advert.location.y - offsetY + 'px';
-  img.className = 'rounded';
-  img.width = 40;
-  img.height = 40;
+  var PIN_CLASSNAME = 'pin';
+  var IMG_CLASSNAME = 'rounded';
+  var IMG_WIDTH = 40;
+  var IMG_HEIGHT = 40;
+
+  pin.className = PIN_CLASSNAME;
+  pin.style.left = advert.location.x - pin.offsetWidth / 2 + 'px';
+  pin.style.top = advert.location.y - pin.offsetHeight + 'px';
+  img.className = IMG_CLASSNAME;
+  img.width = IMG_WIDTH;
+  img.height = IMG_HEIGHT;
   img.src = advert.author.avatar;
   pin.appendChild(img);
 
@@ -172,7 +173,7 @@ var generatePin = function (advert) {
 
 /**
  * Adds pins to the page
- * @param  {Array<Object>} adverts
+ * @param {Array<Object>} adverts
  */
 var renderPins = function (adverts) {
   var pin = document.querySelector('.tokyo__pin-map');
@@ -185,15 +186,17 @@ var renderPins = function (adverts) {
   pin.appendChild(fragment);
 };
 
-var lodgeTemplate = document.querySelector('#lodge-template');
-var dialog = document.querySelector('.dialog__panel');
+/**
+ * @type {DocumentFragment}
+ */
+var lodgeTemplate = document.querySelector('#lodge-template').content;
 
 /**
- * Adds a dialog item to the page
- * @param  {Object} advertsItem
+ * @param {Object} advertsItem
+ * @return {Element}
  */
-var renderDialog = function (advertsItem) {
-  var lodgeElement = lodgeTemplate.content.cloneNode(true);
+var generateLodgeElement = function (advertsItem) {
+  var lodgeElement = lodgeTemplate.cloneNode(true);
 
   lodgeElement.querySelector('.lodge__title').textContent = advertsItem.offer.title;
   lodgeElement.querySelector('.lodge__address').textContent = advertsItem.offer.address;
@@ -201,17 +204,30 @@ var renderDialog = function (advertsItem) {
   lodgeElement.querySelector('.lodge__type').textContent = ACCOMODATION_TYPE_NAMES[advertsItem.offer.type];
   lodgeElement.querySelector('.lodge__rooms-and-guests').textContent = 'Для ' + advertsItem.offer.guests + ' гостей в ' + advertsItem.offer.rooms + ' комнатах';
   lodgeElement.querySelector('.lodge__checkin-time').textContent = 'Заезд после' + advertsItem.offer.checkin + ', выезд до ' + advertsItem.offer.checkout;
+
   for (var i = 0; i < advertsItem.offer.features.length; i++) {
     var span = document.createElement('span');
     span.className = 'feature__image feature__image--' + advertsItem.offer.features[i];
     lodgeElement.querySelector('.lodge__features').appendChild(span);
   }
+
   lodgeElement.querySelector('.lodge__description').textContent = advertsItem.offer.description;
   document.querySelector('.dialog__title img').src = advertsItem.author.avatar;
-  dialog.appendChild(lodgeElement);
+
+  return lodgeElement;
 };
 
-var advertsList = generateAdvertsList();
+var dialog = document.querySelector('.dialog');
+var dialogPanel = document.querySelector('.dialog__panel');
+
+/**
+ * Adds a dialog item to the page
+ * @param {Element} lodgeElement
+ */
+var renderDialog = function (lodgeElement) {
+  dialog.replaceChild(lodgeElement, dialogPanel);
+};
+
+var advertsList = generateAdvertsList(8);
 renderPins(advertsList);
-removeChildsFromCollection(dialog);
-renderDialog(advertsList[advertsList.length - 1]);
+renderDialog(generateLodgeElement(advertsList[advertsList.length - 1]));
