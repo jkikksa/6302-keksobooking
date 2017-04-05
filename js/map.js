@@ -99,21 +99,27 @@ var getRandomArray = function (array) {
 };
 
 /**
- * Create an advert
  * @return {Object}
  */
-var generateAdvert = function () {
+var generateLocation = function () {
+  return {
+    'x': getRandomInt(300, 900),
+    'y': getRandomInt(100, 500)
+  };
+};
+
+/**
+ * Create an advert
+ * @param {Object} location
+ * @return {Object}
+ */
+var generateAdvert = function (location) {
   var advert = {
     'author': {
       'avatar': 'img/avatars/user' + getRandomNumber() + '.png'
     },
-
-    'location': {
-      'x': getRandomInt(300, 900),
-      'y': getRandomInt(100, 500)
-    }
   };
-
+  advert.location = location;
   advert.offer = {
     'title': getRandomTitle(),
     'address': advert.location.x + ',' + advert.location.y,
@@ -140,7 +146,7 @@ var generateAdvertsList = function (avdertsAmount) {
   var advertsList = [];
 
   for (var i = 0; i < avdertsAmount; i++) {
-    advertsList.push(generateAdvert());
+    advertsList.push(generateAdvert(generateLocation()));
   }
 
   return advertsList;
@@ -212,7 +218,6 @@ var generateLodgeElement = function (advertsItem) {
   }
 
   lodgeElement.querySelector('.lodge__description').textContent = advertsItem.offer.description;
-  document.querySelector('.dialog__title img').src = advertsItem.author.avatar;
 
   return lodgeElement;
 };
@@ -222,12 +227,13 @@ var dialogPanel = document.querySelector('.dialog__panel');
 
 /**
  * Adds a dialog item to the page
- * @param {Element} lodgeElement
+ * @param {Object} advertsItem
  */
-var renderDialog = function (lodgeElement) {
-  dialog.replaceChild(lodgeElement, dialogPanel);
+var renderDialog = function (advertsItem) {
+  dialog.replaceChild(generateLodgeElement(advertsItem), dialogPanel);
+  document.querySelector('.dialog__title img').src = advertsItem.author.avatar;
 };
 
 var advertsList = generateAdvertsList(8);
 renderPins(advertsList);
-renderDialog(generateLodgeElement(advertsList[advertsList.length - 1]));
+renderDialog(advertsList[advertsList.length - 1]);
