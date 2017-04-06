@@ -152,6 +152,11 @@ var generateAdvertsList = function (avdertsAmount) {
   return advertsList;
 };
 
+var PIN_CLASSNAME = 'pin';
+var IMG_CLASSNAME = 'rounded';
+var IMG_WIDTH = 40;
+var IMG_HEIGHT = 40;
+
 /**
  * Creates a pin based on the object parameters
  * @param {Object} advert
@@ -160,10 +165,6 @@ var generateAdvertsList = function (avdertsAmount) {
 var generatePin = function (advert) {
   var pin = document.createElement('div');
   var img = document.createElement('img');
-  var PIN_CLASSNAME = 'pin';
-  var IMG_CLASSNAME = 'rounded';
-  var IMG_WIDTH = 40;
-  var IMG_HEIGHT = 40;
 
   pin.className = PIN_CLASSNAME;
   pin.style.left = advert.location.x - pin.offsetWidth / 2 + 'px';
@@ -198,6 +199,17 @@ var renderPins = function (adverts) {
 var lodgeTemplate = document.querySelector('#lodge-template').content;
 
 /**
+ * [description]
+ * @param {string} featureItem
+ * @return {Element}
+ */
+var generateFeature = function (featureItem) {
+  var span = document.createElement('span');
+  span.className = 'feature__image feature__image--' + featureItem;
+  return span;
+};
+
+/**
  * @param {Object} advertsItem
  * @return {Element}
  */
@@ -211,10 +223,10 @@ var generateLodgeElement = function (advertsItem) {
   lodgeElement.querySelector('.lodge__rooms-and-guests').textContent = 'Для ' + advertsItem.offer.guests + ' гостей в ' + advertsItem.offer.rooms + ' комнатах';
   lodgeElement.querySelector('.lodge__checkin-time').textContent = 'Заезд после' + advertsItem.offer.checkin + ', выезд до ' + advertsItem.offer.checkout;
 
-  for (var i = 0; i < advertsItem.offer.features.length; i++) {
-    var span = document.createElement('span');
-    span.className = 'feature__image feature__image--' + advertsItem.offer.features[i];
-    lodgeElement.querySelector('.lodge__features').appendChild(span);
+  var features = advertsItem.offer.features;
+
+  for (var i = 0; i < features.length; i++) {
+    lodgeElement.querySelector('.lodge__features').appendChild(generateFeature(features[i]));
   }
 
   lodgeElement.querySelector('.lodge__description').textContent = advertsItem.offer.description;
