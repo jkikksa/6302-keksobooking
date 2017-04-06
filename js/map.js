@@ -36,6 +36,16 @@ var CHECKIN_TIMES = ['12:00', '13:00', '14:00'];
 var CHECKOUT_TIMES = ['12:00', '13:00', '14:00'];
 
 /**
+ * @const {Number}
+ */
+var ENTER_KEY_CODE = 13;
+
+/**
+ * @const {Number}
+ */
+var ESC_KEY_CODE = 27;
+
+/**
  * @const
  * @type {Object}
  */
@@ -96,6 +106,10 @@ var getRandomArray = function (array) {
   return array.filter(function () {
     return getRandomInt(0, 1) === 0;
   });
+};
+
+var toggleHidden = function (element, state) {
+  element.classList.toggle('hidden', state);
 };
 
 /**
@@ -173,6 +187,7 @@ var generatePin = function (advert) {
   img.width = IMG_WIDTH;
   img.height = IMG_HEIGHT;
   img.src = advert.author.avatar;
+  img.tabIndex = '0';
   pin.appendChild(img);
 
   return pin;
@@ -183,14 +198,14 @@ var generatePin = function (advert) {
  * @param {Array<Object>} adverts
  */
 var renderPins = function (adverts) {
-  var pin = document.querySelector('.tokyo__pin-map');
+  var pinMap = document.querySelector('.tokyo__pin-map');
   var fragment = document.createDocumentFragment();
 
   for (var i = 0; i < adverts.length; i++) {
     fragment.appendChild(generatePin(adverts[i]));
   }
 
-  pin.appendChild(fragment);
+  pinMap.appendChild(fragment);
 };
 
 /**
@@ -235,17 +250,75 @@ var generateLodgeElement = function (advertsItem) {
 };
 
 var dialog = document.querySelector('.dialog');
-var dialogPanel = document.querySelector('.dialog__panel');
 
 /**
  * Adds a dialog item to the page
  * @param {Object} advertsItem
  */
 var renderDialog = function (advertsItem) {
+  var dialogPanel = document.querySelector('.dialog__panel');
   dialog.replaceChild(generateLodgeElement(advertsItem), dialogPanel);
   document.querySelector('.dialog__title img').src = advertsItem.author.avatar;
 };
 
 var advertsList = generateAdvertsList(8);
 renderPins(advertsList);
-renderDialog(advertsList[advertsList.length - 1]);
+// renderDialog(advertsList[advertsList.length - 1]);
+
+var pins = document.querySelectorAll('.pin:not(.pin__main)');
+var dialogClose = document.querySelector('.dialog__close');
+
+var removePinActiveClasses = function () {
+  for (var i = 0; i < pins.length; i++) {
+    pins[i].classList.remove('pin--active');
+  }
+};
+
+var pressEscHandler = function (evt) {
+  if (evt.keyCode === ESC_KEY_CODE) {
+    closePanel();
+  }
+};
+
+var closePanel = function () {
+  toggleHidden(dialog, true);
+  removePinActiveClasses();
+
+  document.removeEventListener('keydown', pressEscHandler);
+};
+
+var openPanel = function () {
+  toggleHidden(dialog, false);
+
+  document.addEventListener('keydown', pressEscHandler);
+};
+
+dialogClose.addEventListener('click', function (evt) {
+  closePanel();
+});
+
+dialogClose.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEY_CODE) {
+    closePanel();
+  }
+});
+
+for (var i = 0; i < pins.length; i++) {
+  (function (i) {
+    pins[i].addEventListener('click', function (evt) {
+      removePinActiveClasses();
+      this.classList.add('pin--active');
+      openPanel();
+      renderDialog(advertsList[i]);
+    });
+
+    pins[i].addEventListener('keydown', function (evt) {
+      if (evt.keyCode === ENTER_KEY_CODE) {
+        removePinActiveClasses();
+        this.classList.add('pin--active');
+        openPanel();
+        renderDialog(advertsList[i]);
+      }
+    });
+  })(i);
+}

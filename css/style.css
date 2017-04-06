@@ -655,3 +655,12 @@ select option:hover {
 .rounded {
     border-radius: 50%;
 }
+
+.hidden {
+  display: none;
+}
+
+.pin img:focus {
+  outline: 4px dashed #ff5635;
+  outline-offset: 5px;
+}
