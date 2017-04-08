@@ -305,7 +305,7 @@ dialogClose.addEventListener('keydown', function (evt) {
   }
 });
 
-var addPinBehavior = function (pin, index) {
+var pinClickHandler = function (pin, index) {
   removeActivePinClasses();
   pin.classList.add('pin--active');
   openDialogPanel();
@@ -314,11 +314,11 @@ var addPinBehavior = function (pin, index) {
 
 Array.prototype.slice.call(pins).forEach(function (currentPin, index) {
   currentPin.addEventListener('click', function (evt) {
-    addPinBehavior(currentPin, index);
+    pinClickHandler(currentPin, index);
   });
   currentPin.addEventListener('keydown', function (evt) {
     if (isEnterPressed(evt)) {
-      addPinBehavior(currentPin, index);
+      pinClickHandler(currentPin, index);
     }
   });
 });
