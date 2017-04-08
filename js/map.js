@@ -36,14 +36,13 @@ var CHECKIN_TIMES = ['12:00', '13:00', '14:00'];
 var CHECKOUT_TIMES = ['12:00', '13:00', '14:00'];
 
 /**
- * @const {number}
+ * Keyboard key codes
+ * @enum {number}
  */
-var ENTER_KEY_CODE = 13;
-
-/**
- * @const {number}
- */
-var ESC_KEY_CODE = 27;
+var keyCodes = {
+  ENTER: 13,
+  ESQ: 27
+};
 
 /**
  * @const
@@ -274,11 +273,11 @@ var removeActivePinClasses = function () {
 };
 
 var isEnterPressed = function (evt) {
-  return evt.keyCode === ENTER_KEY_CODE;
+  return evt.keyCode === keyCodes.ENTER;
 };
 
 var escPressHandler = function (evt) {
-  if (evt.keyCode === ESC_KEY_CODE) {
+  if (evt.keyCode === keyCodes.ESQ) {
     closeDialogPanel();
   }
 };
@@ -306,7 +305,7 @@ dialogClose.addEventListener('keydown', function (evt) {
   }
 });
 
-var addPinHandler = function (pin, index) {
+var addPinBehavior = function (pin, index) {
   removeActivePinClasses();
   pin.classList.add('pin--active');
   openDialogPanel();
@@ -315,11 +314,11 @@ var addPinHandler = function (pin, index) {
 
 Array.prototype.slice.call(pins).forEach(function (currentPin, index) {
   currentPin.addEventListener('click', function (evt) {
-    addPinHandler(currentPin, index);
+    addPinBehavior(currentPin, index);
   });
   currentPin.addEventListener('keydown', function (evt) {
     if (isEnterPressed(evt)) {
-      addPinHandler(currentPin, index);
+      addPinBehavior(currentPin, index);
     }
   });
 });
