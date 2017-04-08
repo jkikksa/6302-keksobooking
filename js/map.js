@@ -36,12 +36,12 @@ var CHECKIN_TIMES = ['12:00', '13:00', '14:00'];
 var CHECKOUT_TIMES = ['12:00', '13:00', '14:00'];
 
 /**
- * @const {Number}
+ * @const {number}
  */
 var ENTER_KEY_CODE = 13;
 
 /**
- * @const {Number}
+ * @const {number}
  */
 var ESC_KEY_CODE = 27;
 
@@ -263,62 +263,63 @@ var renderDialog = function (advertsItem) {
 
 var advertsList = generateAdvertsList(8);
 renderPins(advertsList);
-// renderDialog(advertsList[advertsList.length - 1]);
 
 var pins = document.querySelectorAll('.pin:not(.pin__main)');
 var dialogClose = document.querySelector('.dialog__close');
 
-var removePinActiveClasses = function () {
+var removeActivePinClasses = function () {
   for (var i = 0; i < pins.length; i++) {
     pins[i].classList.remove('pin--active');
   }
 };
 
-var pressEscHandler = function (evt) {
+var isEnterPressed = function (evt) {
+  return evt.keyCode === ENTER_KEY_CODE;
+};
+
+var escPressHandler = function (evt) {
   if (evt.keyCode === ESC_KEY_CODE) {
-    closePanel();
+    closeDialogPanel();
   }
 };
 
-var closePanel = function () {
+var closeDialogPanel = function () {
   toggleHidden(dialog, true);
-  removePinActiveClasses();
+  removeActivePinClasses();
 
-  document.removeEventListener('keydown', pressEscHandler);
+  document.removeEventListener('keydown', escPressHandler);
 };
 
-var openPanel = function () {
+var openDialogPanel = function () {
   toggleHidden(dialog, false);
 
-  document.addEventListener('keydown', pressEscHandler);
+  document.addEventListener('keydown', escPressHandler);
 };
 
 dialogClose.addEventListener('click', function (evt) {
-  closePanel();
+  closeDialogPanel();
 });
 
 dialogClose.addEventListener('keydown', function (evt) {
-  if (evt.keyCode === ENTER_KEY_CODE) {
-    closePanel();
+  if (isEnterPressed(evt)) {
+    closeDialogPanel();
   }
 });
 
-for (var i = 0; i < pins.length; i++) {
-  (function (i) {
-    pins[i].addEventListener('click', function (evt) {
-      removePinActiveClasses();
-      this.classList.add('pin--active');
-      openPanel();
-      renderDialog(advertsList[i]);
-    });
+var addPinHandler = function (pin, index) {
+  removeActivePinClasses();
+  pin.classList.add('pin--active');
+  openDialogPanel();
+  renderDialog(advertsList[index]);
+};
 
-    pins[i].addEventListener('keydown', function (evt) {
-      if (evt.keyCode === ENTER_KEY_CODE) {
-        removePinActiveClasses();
-        this.classList.add('pin--active');
-        openPanel();
-        renderDialog(advertsList[i]);
-      }
-    });
-  })(i);
-}
+Array.prototype.slice.call(pins).forEach(function (currentPin, index) {
+  currentPin.addEventListener('click', function (evt) {
+    addPinHandler(currentPin, index);
+  });
+  currentPin.addEventListener('keydown', function (evt) {
+    if (isEnterPressed(evt)) {
+      addPinHandler(currentPin, index);
+    }
+  });
+});
