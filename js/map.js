@@ -39,7 +39,7 @@ var CHECKOUT_TIMES = ['12:00', '13:00', '14:00'];
  * Keyboard key codes
  * @enum {number}
  */
-var KeyCodes = {
+var KeyCode = {
   ENTER: 13,
   ESC: 27
 };
@@ -79,7 +79,7 @@ var getRandomArrayItem = function (array) {
  * @return {Function}
  */
 var getRandomUniqueItem = function (array) {
-  var newArray = array.slice();
+  var newArray = array.slice(0);
 
   return function () {
     return newArray.splice(getRandomInt(0, newArray.length - 1), 1);
@@ -107,8 +107,40 @@ var getRandomArray = function (array) {
   });
 };
 
+/**
+ * Toggle class 'hidden' in the element.
+ * @param {Element} element The DOM element in which the class is toggled
+ * @param {boolean} state If false - remove class, if true - add class.
+ */
 var toggleHidden = function (element, state) {
   element.classList.toggle('hidden', state);
+};
+
+/**
+ * Removes the class from the active pin element
+ */
+var removeActivePinClass = function () {
+  if (document.querySelector('.pin--active')) {
+    document.querySelector('.pin--active').classList.remove('pin--active');
+  }
+};
+
+/**
+ * @param {KeyboardEvent} evt
+ * @return {boolean}
+ */
+var isEnterPressed = function (evt) {
+  return evt.keyCode === KeyCode.ENTER;
+};
+
+/**
+ * The handler that closes the dialog panel when the escape key is pressed
+ * @param {KeyboardEvent} evt
+ */
+var onEscPress = function (evt) {
+  if (evt.keyCode === KeyCode.ESC) {
+    closeDialogPanel();
+  }
 };
 
 /**
@@ -165,10 +197,41 @@ var generateAdvertsList = function (avdertsAmount) {
   return advertsList;
 };
 
+/**
+ * @const
+ * @type {string}
+ */
 var PIN_CLASSNAME = 'pin';
+
+/**
+ * @const
+ * @type {string}
+ */
 var IMG_CLASSNAME = 'rounded';
+
+/**
+ * @const
+ * @type {number}
+ */
 var IMG_WIDTH = 40;
+
+/**
+ * @const
+ * @type {number}
+ */
 var IMG_HEIGHT = 40;
+
+/**
+ * Adds behavior for the pin
+ * @param  {Element} pin
+ * @param  {Object} advert
+ */
+var setPinActive = function (pin, advert) {
+  removeActivePinClass();
+  pin.classList.add('pin--active');
+  openDialogPanel();
+  renderDialog(advert);
+};
 
 /**
  * Creates a pin based on the object parameters
@@ -188,6 +251,16 @@ var generatePin = function (advert) {
   img.src = advert.author.avatar;
   img.tabIndex = '0';
   pin.appendChild(img);
+
+  pin.addEventListener('click', function (evt) {
+    setPinActive(pin, advert);
+  });
+
+  pin.addEventListener('keydown', function (evt) {
+    if (isEnterPressed(evt)) {
+      setPinActive(pin, advert);
+    }
+  });
 
   return pin;
 };
@@ -213,7 +286,6 @@ var renderPins = function (adverts) {
 var lodgeTemplate = document.querySelector('#lodge-template').content;
 
 /**
- * [description]
  * @param {string} featureItem
  * @return {Element}
  */
@@ -263,37 +335,20 @@ var renderDialog = function (advertsItem) {
 var advertsList = generateAdvertsList(8);
 renderPins(advertsList);
 
-var pins = document.querySelectorAll('.pin:not(.pin__main)');
-var dialogClose = document.querySelector('.dialog__close');
-
-var removeActivePinClasses = function () {
-  for (var i = 0; i < pins.length; i++) {
-    pins[i].classList.remove('pin--active');
-  }
-};
-
-var isEnterPressed = function (evt) {
-  return evt.keyCode === KeyCodes.ENTER;
-};
-
-var escPressHandler = function (evt) {
-  if (evt.keyCode === KeyCodes.ESC) {
-    closeDialogPanel();
-  }
-};
-
 var closeDialogPanel = function () {
   toggleHidden(dialog, true);
-  removeActivePinClasses();
+  removeActivePinClass();
 
-  document.removeEventListener('keydown', escPressHandler);
+  document.removeEventListener('keydown', onEscPress);
 };
 
 var openDialogPanel = function () {
   toggleHidden(dialog, false);
 
-  document.addEventListener('keydown', escPressHandler);
+  document.addEventListener('keydown', onEscPress);
 };
+
+var dialogClose = document.querySelector('.dialog__close');
 
 dialogClose.addEventListener('click', function (evt) {
   closeDialogPanel();
@@ -303,22 +358,4 @@ dialogClose.addEventListener('keydown', function (evt) {
   if (isEnterPressed(evt)) {
     closeDialogPanel();
   }
-});
-
-var pinClickHandler = function (pin, index) {
-  removeActivePinClasses();
-  pin.classList.add('pin--active');
-  openDialogPanel();
-  renderDialog(advertsList[index]);
-};
-
-Array.prototype.slice.call(pins).forEach(function (currentPin, index) {
-  currentPin.addEventListener('click', function (evt) {
-    pinClickHandler(currentPin, index);
-  });
-  currentPin.addEventListener('keydown', function (evt) {
-    if (isEnterPressed(evt)) {
-      pinClickHandler(currentPin, index);
-    }
-  });
 });
