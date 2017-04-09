@@ -322,3 +322,51 @@ Array.prototype.slice.call(pins).forEach(function (currentPin, index) {
     }
   });
 });
+
+var form = document.querySelector('.notice__form');
+var formSubmit = form.querySelector('.form__submit');
+var time = form.querySelector('#time');
+var timeout = form.querySelector('#timeout');
+var price = form.querySelector('#price');
+var type = form.querySelector('#type');
+var roomNumber = form.querySelector('#room_number');
+var capacity = form.querySelector('#capacity');
+
+time.addEventListener('change', function (evt) {
+  if (time.selectedIndex === timeout.selectedIndex) {
+    return;
+  }
+  timeout.selectedIndex = time.selectedIndex;
+});
+
+type.addEventListener('change', function (evt) {
+  switch (type.options[type.selectedIndex].value) {
+    case 'Лачуга':
+      price.min = 0;
+      break;
+    case 'Квартира':
+      price.min = 1000;
+      break;
+    case 'Дворец':
+      price.min = 10000;
+      break;
+  }
+  price.value = price.min;
+});
+
+roomNumber.addEventListener('change', function (evt) {
+  if (roomNumber.selectedIndex === 0) {
+    capacity.selectedIndex = 1;
+  } else {
+    capacity.selectedIndex = 0;
+  }
+});
+
+formSubmit.addEventListener('click', function (evt) {
+
+  for (var i = 0; i < form.elements.length; i++) {
+    if (!form.elements[i].validity.valid) {
+      form.elements[i].classList.add('error');
+    }
+  }
+});

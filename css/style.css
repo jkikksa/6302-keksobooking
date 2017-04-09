@@ -664,3 +664,7 @@ select option:hover {
   outline: 4px dashed #ff5635;
   outline-offset: 5px;
 }
+
+.error {
+  outline: 3px solid red !important;
+}
