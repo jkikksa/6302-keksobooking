@@ -39,9 +39,9 @@ var CHECKOUT_TIMES = ['12:00', '13:00', '14:00'];
  * Keyboard key codes
  * @enum {number}
  */
-var keyCodes = {
+var KeyCodes = {
   ENTER: 13,
-  ESQ: 27
+  ESC: 27
 };
 
 /**
@@ -273,11 +273,11 @@ var removeActivePinClasses = function () {
 };
 
 var isEnterPressed = function (evt) {
-  return evt.keyCode === keyCodes.ENTER;
+  return evt.keyCode === KeyCodes.ENTER;
 };
 
 var escPressHandler = function (evt) {
-  if (evt.keyCode === keyCodes.ESQ) {
+  if (evt.keyCode === KeyCodes.ESC) {
     closeDialogPanel();
   }
 };
