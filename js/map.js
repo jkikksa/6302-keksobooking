@@ -120,8 +120,9 @@ var toggleHidden = function (element, state) {
  * Removes the class from the active pin element
  */
 var removeActivePinClass = function () {
-  if (document.querySelector('.pin--active')) {
-    document.querySelector('.pin--active').classList.remove('pin--active');
+  var activePin = document.querySelector('.pin--active');
+  if (activePin) {
+    activePin.classList.remove('pin--active');
   }
 };
 
