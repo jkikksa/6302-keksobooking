@@ -36,6 +36,15 @@ var CHECKIN_TIMES = ['12:00', '13:00', '14:00'];
 var CHECKOUT_TIMES = ['12:00', '13:00', '14:00'];
 
 /**
+ * Keyboard key codes
+ * @enum {number}
+ */
+var KeyCode = {
+  ENTER: 13,
+  ESC: 27
+};
+
+/**
  * @const
  * @type {Object}
  */
@@ -70,7 +79,7 @@ var getRandomArrayItem = function (array) {
  * @return {Function}
  */
 var getRandomUniqueItem = function (array) {
-  var newArray = array.slice();
+  var newArray = array.slice(0);
 
   return function () {
     return newArray.splice(getRandomInt(0, newArray.length - 1), 1);
@@ -96,6 +105,42 @@ var getRandomArray = function (array) {
   return array.filter(function () {
     return getRandomInt(0, 1) === 0;
   });
+};
+
+/**
+ * Toggle class 'hidden' in the element.
+ * @param {Element} element The DOM element in which the class is toggled
+ * @param {boolean} state If false - remove class, if true - add class.
+ */
+var toggleHidden = function (element, state) {
+  element.classList.toggle('hidden', state);
+};
+
+/**
+ * Removes the class from the active pin element
+ */
+var removeActivePinClass = function () {
+  if (document.querySelector('.pin--active')) {
+    document.querySelector('.pin--active').classList.remove('pin--active');
+  }
+};
+
+/**
+ * @param {KeyboardEvent} evt
+ * @return {boolean}
+ */
+var isEnterPressed = function (evt) {
+  return evt.keyCode === KeyCode.ENTER;
+};
+
+/**
+ * The handler that closes the dialog panel when the escape key is pressed
+ * @param {KeyboardEvent} evt
+ */
+var onEscPress = function (evt) {
+  if (evt.keyCode === KeyCode.ESC) {
+    closeDialogPanel();
+  }
 };
 
 /**
@@ -152,10 +197,41 @@ var generateAdvertsList = function (avdertsAmount) {
   return advertsList;
 };
 
+/**
+ * @const
+ * @type {string}
+ */
 var PIN_CLASSNAME = 'pin';
+
+/**
+ * @const
+ * @type {string}
+ */
 var IMG_CLASSNAME = 'rounded';
+
+/**
+ * @const
+ * @type {number}
+ */
 var IMG_WIDTH = 40;
+
+/**
+ * @const
+ * @type {number}
+ */
 var IMG_HEIGHT = 40;
+
+/**
+ * Adds behavior for the pin
+ * @param  {Element} pin
+ * @param  {Object} advert
+ */
+var setPinActive = function (pin, advert) {
+  removeActivePinClass();
+  pin.classList.add('pin--active');
+  openDialogPanel();
+  renderDialog(advert);
+};
 
 /**
  * Creates a pin based on the object parameters
@@ -173,7 +249,18 @@ var generatePin = function (advert) {
   img.width = IMG_WIDTH;
   img.height = IMG_HEIGHT;
   img.src = advert.author.avatar;
+  img.tabIndex = '0';
   pin.appendChild(img);
+
+  pin.addEventListener('click', function (evt) {
+    setPinActive(pin, advert);
+  });
+
+  pin.addEventListener('keydown', function (evt) {
+    if (isEnterPressed(evt)) {
+      setPinActive(pin, advert);
+    }
+  });
 
   return pin;
 };
@@ -183,14 +270,14 @@ var generatePin = function (advert) {
  * @param {Array<Object>} adverts
  */
 var renderPins = function (adverts) {
-  var pin = document.querySelector('.tokyo__pin-map');
+  var pinMap = document.querySelector('.tokyo__pin-map');
   var fragment = document.createDocumentFragment();
 
   for (var i = 0; i < adverts.length; i++) {
     fragment.appendChild(generatePin(adverts[i]));
   }
 
-  pin.appendChild(fragment);
+  pinMap.appendChild(fragment);
 };
 
 /**
@@ -199,7 +286,6 @@ var renderPins = function (adverts) {
 var lodgeTemplate = document.querySelector('#lodge-template').content;
 
 /**
- * [description]
  * @param {string} featureItem
  * @return {Element}
  */
@@ -235,17 +321,41 @@ var generateLodgeElement = function (advertsItem) {
 };
 
 var dialog = document.querySelector('.dialog');
-var dialogPanel = document.querySelector('.dialog__panel');
 
 /**
  * Adds a dialog item to the page
  * @param {Object} advertsItem
  */
 var renderDialog = function (advertsItem) {
+  var dialogPanel = document.querySelector('.dialog__panel');
   dialog.replaceChild(generateLodgeElement(advertsItem), dialogPanel);
   document.querySelector('.dialog__title img').src = advertsItem.author.avatar;
 };
 
 var advertsList = generateAdvertsList(8);
 renderPins(advertsList);
-renderDialog(advertsList[advertsList.length - 1]);
+
+var closeDialogPanel = function () {
+  toggleHidden(dialog, true);
+  removeActivePinClass();
+
+  document.removeEventListener('keydown', onEscPress);
+};
+
+var openDialogPanel = function () {
+  toggleHidden(dialog, false);
+
+  document.addEventListener('keydown', onEscPress);
+};
+
+var dialogClose = document.querySelector('.dialog__close');
+
+dialogClose.addEventListener('click', function (evt) {
+  closeDialogPanel();
+});
+
+dialogClose.addEventListener('keydown', function (evt) {
+  if (isEnterPressed(evt)) {
+    closeDialogPanel();
+  }
+});
