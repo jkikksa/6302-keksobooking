@@ -363,41 +363,56 @@ dialogClose.addEventListener('keydown', function (evt) {
 
 var form = document.querySelector('.notice__form');
 var formSubmit = form.querySelector('.form__submit');
-var time = form.querySelector('#time');
-var timeout = form.querySelector('#timeout');
+var timeIn = form.querySelector('#time');
+var timeOut = form.querySelector('#timeout');
 var price = form.querySelector('#price');
 var type = form.querySelector('#type');
 var roomNumber = form.querySelector('#room_number');
 var capacity = form.querySelector('#capacity');
 
-time.addEventListener('change', function (evt) {
-  if (time.selectedIndex === timeout.selectedIndex) {
+/**
+ * Gives the values of the active option in the select
+ * @param {Element} select
+ * @return {string}
+ */
+var getSelectedOptionValue = function (select) {
+  return select.options[select.selectedIndex].value;
+};
+
+timeIn.addEventListener('change', function (evt) {
+  if (timeIn.selectedIndex === timeOut.selectedIndex) {
     return;
   }
-  timeout.selectedIndex = time.selectedIndex;
+  timeOut.selectedIndex = timeIn.selectedIndex;
 });
 
+/**
+ * @const
+ * @type {Object}
+ */
+var PRICES_MAP = {
+  'shack': 0,
+  'flat': 1000,
+  'palace': 10000
+};
+
 type.addEventListener('change', function (evt) {
-  switch (type.options[type.selectedIndex].value) {
-    case 'Лачуга':
-      price.min = 0;
-      break;
-    case 'Квартира':
-      price.min = 1000;
-      break;
-    case 'Дворец':
-      price.min = 10000;
-      break;
-  }
+  price.min = PRICES_MAP[getSelectedOptionValue(type)];
   price.value = price.min;
 });
 
+/**
+ * @const
+ * @type {Object}
+ */
+var CAPACITY_MAP = {
+  'rooms-1': 'guest-0',
+  'rooms-2': 'guest-3',
+  'rooms-100': 'guest-3'
+};
+
 roomNumber.addEventListener('change', function (evt) {
-  if (roomNumber.selectedIndex === 0) {
-    capacity.selectedIndex = 1;
-  } else {
-    capacity.selectedIndex = 0;
-  }
+  capacity.value = CAPACITY_MAP[getSelectedOptionValue(roomNumber)];
 });
 
 formSubmit.addEventListener('click', function (evt) {

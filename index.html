@@ -117,15 +117,15 @@
         <div class="form__panel">
           <div class="form__element  form__element--wide">
             <label for="title">Заголовок объявления</label>
-            <input id="title" type="text" placeholder="Милая, уютная квартирка, например" maxlength="100" minlength="2" required>
+            <input id="title" type="text" placeholder="Милая, уютная квартирка, например" maxlength="100" minlength="30" required>
           </div>
           <div class="form__row">
             <div class="form__element">
               <label for="type">Тип жилья</label>
               <select id="type">
-                <option selected>Квартира</option>
-                <option>Лачуга</option>
-                <option>Дворец</option>
+                <option value="flat" selected>Квартира</option>
+                <option value="shack">Лачуга</option>
+                <option value="palace">Дворец</option>
               </select>
             </div>
             <div class="form__element">
@@ -137,16 +137,16 @@
             <div class="form__element">
               <label for="room_number">Кол-во комнат</label>
               <select id="room_number">
-                <option selected>1 комната</option>
-                <option>2 комнаты</option>
-                <option>100 комнат</option>
+                <option value="rooms-1" selected>1 комната</option>
+                <option value="rooms-2">2 комнаты</option>
+                <option value="25">100 комнат</option>
               </select>
             </div>
             <div class="form__element">
               <label for="capacity">Количество мест</label>
               <select id="capacity">
-                <option selected>для 3 гостей</option>
-                <option>не для гостей</option>
+                <option value="guest-3">для 3 гостей</option>
+                <option value="guest-0" selected>не для гостей</option>
               </select>
             </div>
           </div>
