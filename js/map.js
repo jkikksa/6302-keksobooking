@@ -371,19 +371,17 @@ var roomNumber = form.querySelector('#room_number');
 var capacity = form.querySelector('#capacity');
 
 /**
- * Gives the values of the active option in the select
- * @param {Element} select
- * @return {string}
+ * @const
+ * @type {Object}
  */
-var getSelectedOptionValue = function (select) {
-  return select.options[select.selectedIndex].value;
+var TIMES_MAP = {
+  'timein-12': 'timeout-12',
+  'timein-13': 'timeout-13',
+  'timein-14': 'timeout-14'
 };
 
 timeIn.addEventListener('change', function (evt) {
-  if (timeIn.selectedIndex === timeOut.selectedIndex) {
-    return;
-  }
-  timeOut.selectedIndex = timeIn.selectedIndex;
+  timeOut.value = TIMES_MAP[timeIn.value];
 });
 
 /**
@@ -397,8 +395,7 @@ var PRICES_MAP = {
 };
 
 type.addEventListener('change', function (evt) {
-  price.min = PRICES_MAP[getSelectedOptionValue(type)];
-  price.value = price.min;
+  price.min = PRICES_MAP[type.value];
 });
 
 /**
@@ -412,14 +409,9 @@ var CAPACITY_MAP = {
 };
 
 roomNumber.addEventListener('change', function (evt) {
-  capacity.value = CAPACITY_MAP[getSelectedOptionValue(roomNumber)];
+  capacity.value = CAPACITY_MAP[roomNumber.value];
 });
 
-formSubmit.addEventListener('click', function (evt) {
-
-  for (var i = 0; i < form.elements.length; i++) {
-    if (!form.elements[i].validity.valid) {
-      form.elements[i].classList.add('error');
-    }
-  }
-});
+form.addEventListener('invalid', function (evt) {
+  evt.target.classList.add('error');
+}, true);
