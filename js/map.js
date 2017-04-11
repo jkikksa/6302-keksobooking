@@ -1,37 +1,31 @@
 'use strict';
 /**
- * @const
- * @type {Array<string>}
+ * @const {Array<string>}
  */
 var NUMBERS = ['01', '02', '03', '04', '05', '06', '07', '08'];
 
 /**
- * @const
- * @type {Array<string>}
+ * @const {Array<string>}
  */
 var TITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
 
 /**
- * @const
- * @type {Array<string>}
+ * @const {Array<string>}
  */
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
 /**
- * @const
- * @type {Array<string>}
+ * @const {Array<string>}
  */
 var OFFER_TYPES = ['flat', 'house', 'bungalo'];
 
 /**
- * @const
- * @type {Array<string>}
+ * @const {Array<string>}
  */
 var CHECKIN_TIMES = ['12:00', '13:00', '14:00'];
 
 /**
- * @const
- * @type {Array<string>}
+ * @const {Array<string>}
  */
 var CHECKOUT_TIMES = ['12:00', '13:00', '14:00'];
 
@@ -45,8 +39,7 @@ var KeyCode = {
 };
 
 /**
- * @const
- * @type {Object}
+ * @const {Object<string, string>}
  */
 var ACCOMODATION_TYPE_NAMES = {
   'flat': 'Квартира',
@@ -199,26 +192,22 @@ var generateAdvertsList = function (avdertsAmount) {
 };
 
 /**
- * @const
- * @type {string}
+ * @const {string}
  */
 var PIN_CLASSNAME = 'pin';
 
 /**
- * @const
- * @type {string}
+ * @const {string}
  */
 var IMG_CLASSNAME = 'rounded';
 
 /**
- * @const
- * @type {number}
+ * @const {number}
  */
 var IMG_WIDTH = 40;
 
 /**
- * @const
- * @type {number}
+ * @const {number}
  */
 var IMG_HEIGHT = 40;
 
@@ -362,7 +351,6 @@ dialogClose.addEventListener('keydown', function (evt) {
 });
 
 var form = document.querySelector('.notice__form');
-var formSubmit = form.querySelector('.form__submit');
 var timeIn = form.querySelector('#time');
 var timeOut = form.querySelector('#timeout');
 var price = form.querySelector('#price');
@@ -371,13 +359,12 @@ var roomNumber = form.querySelector('#room_number');
 var capacity = form.querySelector('#capacity');
 
 /**
- * @const
- * @type {Object}
+ * @const {Object<string, string>}
  */
 var TIMES_MAP = {
-  'timein-12': 'timeout-12',
-  'timein-13': 'timeout-13',
-  'timein-14': 'timeout-14'
+  'timein_12': 'timeout_12',
+  'timein_13': 'timeout_13',
+  'timein_14': 'timeout_14'
 };
 
 timeIn.addEventListener('change', function (evt) {
@@ -385,8 +372,7 @@ timeIn.addEventListener('change', function (evt) {
 });
 
 /**
- * @const
- * @type {Object}
+ * @const {Object<string, string>}
  */
 var PRICES_MAP = {
   'shack': 0,
@@ -399,13 +385,12 @@ type.addEventListener('change', function (evt) {
 });
 
 /**
- * @const
- * @type {Object}
+ * @const {Object<string, string>}
  */
 var CAPACITY_MAP = {
-  'rooms-1': 'guest-0',
-  'rooms-2': 'guest-3',
-  'rooms-100': 'guest-3'
+  'rooms_1': 'guest_0',
+  'rooms_2': 'guest_3',
+  'rooms_100': 'guest_3'
 };
 
 roomNumber.addEventListener('change', function (evt) {
@@ -414,4 +399,12 @@ roomNumber.addEventListener('change', function (evt) {
 
 form.addEventListener('invalid', function (evt) {
   evt.target.classList.add('error');
+}, true);
+
+form.addEventListener('change', function (evt) {
+  if (evt.target.classList.contains('error')) {
+    if (evt.target.validity.valid) {
+      evt.target.classList.remove('error');
+    }
+  }
 }, true);
