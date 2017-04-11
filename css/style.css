@@ -661,6 +661,10 @@ select option:hover {
 }
 
 .pin img:focus {
-  outline: 4px dashed #ff5635;
-  outline-offset: 5px;
+  outline: none;
+  box-shadow: 0 0 35px 15px #ff5635;
+}
+
+.error {
+  outline: 3px solid red !important;
 }
