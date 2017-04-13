@@ -89,23 +89,8 @@ window.pin = (function () {
     return pin;
   };
 
-  /**
-   * Adds pins to the page
-   * @param {Array<Object>} adverts
-   */
-  var renderPins = function (adverts) {
-    var pinMap = document.querySelector('.tokyo__pin-map');
-    var fragment = document.createDocumentFragment();
-
-    for (var i = 0; i < adverts.length; i++) {
-      fragment.appendChild(generatePin(adverts[i]));
-    }
-
-    pinMap.appendChild(fragment);
-  };
-
   return {
-    renderPins: renderPins,
+    generatePin: generatePin,
     removeActivePinClass: removeActivePinClass
   };
 
