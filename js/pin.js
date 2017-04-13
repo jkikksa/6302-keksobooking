@@ -49,6 +49,7 @@ window.pin = (function () {
   /**
    * Creates a pin based on the object parameters
    * @param {Object} advert
+   * @param {Function} callback
    * @return {Element}
    */
   var generatePin = function (advert, callback) {

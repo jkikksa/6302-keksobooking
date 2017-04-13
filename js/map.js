@@ -5,7 +5,7 @@
  */
 var ADVERTS_AMOUNT = 8;
 
-var adverts = window.advertsGetter(ADVERTS_AMOUNT);
+var advertsList = window.advertsGetter(ADVERTS_AMOUNT);
 
 /**
  * Adds pins to the page
@@ -25,4 +25,4 @@ var renderPins = function (adverts) {
   pinMap.appendChild(fragment);
 };
 
-renderPins(adverts);
+renderPins(advertsList);
