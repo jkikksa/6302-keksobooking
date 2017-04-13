@@ -16,7 +16,10 @@ var renderPins = function (adverts) {
   var fragment = document.createDocumentFragment();
 
   for (var i = 0; i < adverts.length; i++) {
-    fragment.appendChild(window.pin.generatePin(adverts[i]));
+    fragment.appendChild(window.pin.generatePin(adverts[i], function (advert) {
+      window.dialog.openDialog();
+      window.dialog.renderDialog(advert);
+    }));
   }
 
   pinMap.appendChild(fragment);

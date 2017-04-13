@@ -46,19 +46,12 @@ window.pin = (function () {
     pin.classList.add(PIN_ACTIVE_CLASS);
   };
 
-  // var setPinActive = function (pin, advert) {
-  //   removeActivePinClass();
-  //   pin.classList.add(PIN_ACTIVE_CLASS);
-  //   openDialog();
-  //   renderDialog(advert);
-  // };
-
   /**
    * Creates a pin based on the object parameters
    * @param {Object} advert
    * @return {Element}
    */
-  var generatePin = function (advert) {
+  var generatePin = function (advert, callback) {
     var pin = document.createElement('div');
     var img = document.createElement('img');
 
@@ -74,15 +67,13 @@ window.pin = (function () {
 
     pin.addEventListener('click', function (evt) {
       setPinActive(pin, advert);
-      window.dialog.openDialog();
-      window.dialog.renderDialog(advert);
+      callback(advert);
     });
 
     pin.addEventListener('keydown', function (evt) {
       if (window.utils.isEnterPressed(evt)) {
         setPinActive(pin, advert);
-        window.dialog.openDialog();
-        window.dialog.renderDialog(advert);
+        callback(advert);
       }
     });
 
