@@ -31,6 +31,8 @@
     'palace': 10000
   };
 
+  price.min = PRICES_MAP[type.value];
+
   type.addEventListener('change', function (evt) {
     price.min = PRICES_MAP[type.value];
   });
@@ -58,6 +60,6 @@
         evt.target.classList.remove('error');
       }
     }
-  }, true);
+  });
 
 })();

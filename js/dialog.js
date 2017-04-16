@@ -1,6 +1,7 @@
 'use strict';
 
 window.dialog = (function () {
+
   /**
    * @const {Object<string, string>}
    */
@@ -53,54 +54,36 @@ window.dialog = (function () {
   var dialog = document.querySelector('.dialog');
 
   /**
-   * Adds a dialog item to the page
-   * @param {Object} advertsItem
+   * @param  {Function} callback
    */
-  var renderDialog = function (advertsItem) {
-    var dialogPanel = document.querySelector('.dialog__panel');
-    dialog.replaceChild(generateLodgeElement(advertsItem), dialogPanel);
-    document.querySelector('.dialog__title img').src = advertsItem.author.avatar;
+  var closeDialog = function (callback) {
+    window.utils.toggleHidden(dialog, true);
+    callback();
   };
-
 
   /**
-   * The handler that closes the dialog panel when the escape key is pressed
-   * @param {KeyboardEvent} evt
+   * @param  {Object} advert
+   * @param  {Function} callback
    */
-  var onEscPress = function (evt) {
-    if (window.utils.isEscapePressed(evt)) {
-      closeDialog();
-    }
-  };
-
-  var closeDialog = function () {
-    window.utils.toggleHidden(dialog, true);
-    window.pin.removeActivePinClass();
-
-    document.removeEventListener('keydown', onEscPress);
-  };
-
-  var openDialog = function () {
+  var openDialog = function (advert, callback) {
     window.utils.toggleHidden(dialog, false);
-
-    document.addEventListener('keydown', onEscPress);
+    renderDialog(advert);
+    callback();
   };
 
-  var dialogClose = document.querySelector('.dialog__close');
-
-  dialogClose.addEventListener('click', function (evt) {
-    closeDialog();
-  });
-
-  dialogClose.addEventListener('keydown', function (evt) {
-    if (window.utils.isEnterPressed(evt)) {
-      closeDialog();
-    }
-  });
+  /**
+   * Adds a dialog item to the page
+   * @param {Object} advert
+   */
+  var renderDialog = function (advert) {
+    var dialogPanel = document.querySelector('.dialog__panel');
+    dialog.replaceChild(generateLodgeElement(advert), dialogPanel);
+    document.querySelector('.dialog__title img').src = advert.author.avatar;
+  };
 
   return {
-    renderDialog: renderDialog,
-    openDialog: openDialog
+    openDialog: openDialog,
+    closeDialog: closeDialog
   };
 
 })();

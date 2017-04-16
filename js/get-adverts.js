@@ -1,6 +1,6 @@
 'use strict';
 
-window.advertsGetter = (function () {
+window.getAdverts = (function () {
   /**
    * @const {Array<string>}
    */
@@ -69,7 +69,7 @@ window.advertsGetter = (function () {
    * @param {Object} location
    * @return {Object}
    */
-  var generateAdvert = function (location) {
+  var getAdvert = function (location) {
     var advert = {
       'author': {
         'avatar': 'img/avatars/user' + getRandomNumber() + '.png'
@@ -98,15 +98,15 @@ window.advertsGetter = (function () {
    * @param {number} avdertsAmount Amount of adverts
    * @return {Array<Object>}
    */
-  var generateAdvertsList = function (avdertsAmount) {
+  var getAdverts = function (avdertsAmount) {
     var advertsList = [];
 
     for (var i = 0; i < avdertsAmount; i++) {
-      advertsList.push(generateAdvert(generateLocation()));
+      advertsList.push(getAdvert(generateLocation()));
     }
 
     return advertsList;
   };
 
-  return generateAdvertsList;
+  return getAdverts;
 })();

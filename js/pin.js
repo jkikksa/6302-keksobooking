@@ -52,7 +52,7 @@ window.pin = (function () {
    * @param {Function} callback
    * @return {Element}
    */
-  var generatePin = function (advert, callback) {
+  var getPin = function (advert, callback) {
     var pin = document.createElement('div');
     var img = document.createElement('img');
 
@@ -67,13 +67,13 @@ window.pin = (function () {
     pin.appendChild(img);
 
     pin.addEventListener('click', function (evt) {
-      setPinActive(pin, advert);
+      setPinActive(pin);
       callback(advert);
     });
 
     pin.addEventListener('keydown', function (evt) {
       if (window.utils.isEnterPressed(evt)) {
-        setPinActive(pin, advert);
+        setPinActive(pin);
         callback(advert);
       }
     });
@@ -82,7 +82,7 @@ window.pin = (function () {
   };
 
   return {
-    generatePin: generatePin,
+    getPin: getPin,
     removeActivePinClass: removeActivePinClass
   };
 
