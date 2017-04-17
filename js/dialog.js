@@ -54,20 +54,18 @@ window.dialog = (function () {
   var dialog = document.querySelector('.dialog');
 
   /**
-   * @param  {Function} callback
+   * The handler that closes the dialog panel when the escape key is pressed
+   * @param {KeyboardEvent} evt
    */
-  var closeDialog = function (callback) {
-    window.utils.toggleHidden(dialog, true);
-    callback();
+  var onEscPress = function (evt) {
+    if (window.utils.isEscapePressed(evt)) {
+      closeDialog();
+    }
   };
 
-  /**
-   * @param  {Object} advert
-   * @param  {Function} callback
-   */
-  var openDialog = function (advert, callback) {
-    window.utils.toggleHidden(dialog, false);
-    renderDialog(advert);
+  var closeDialog = function (callback) {
+    window.utils.toggleHidden(dialog, true);
+    document.removeEventListener('keydown', onEscPress);
     callback();
   };
 
@@ -82,7 +80,15 @@ window.dialog = (function () {
   };
 
   return {
-    openDialog: openDialog,
+    /**
+     * @param  {Object} advert
+     * @param  {Function} callback
+     */
+    openDialog: function (advert) {
+      window.utils.toggleHidden(dialog, false);
+      renderDialog(advert);
+      document.addEventListener('keydown', onEscPress);
+    },
     closeDialog: closeDialog
   };
 

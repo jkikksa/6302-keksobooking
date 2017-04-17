@@ -9,34 +9,15 @@
 
   var advertsList = window.getAdverts(ADVERTS_AMOUNT);
 
-  /**
-   * The handler that closes the dialog panel when the escape key is pressed
-   * @param {KeyboardEvent} evt
-   */
-  var onEscPress = function (evt) {
-    if (window.utils.isEscapePressed(evt)) {
-      window.dialog.closeDialog(function () {
-        window.pin.removeActivePinClass();
-        document.removeEventListener('keydown', onEscPress);
-      });
-    }
-  };
-
   var dialogClose = document.querySelector('.dialog__close');
 
   dialogClose.addEventListener('click', function (evt) {
-    window.dialog.closeDialog(function () {
-      window.pin.removeActivePinClass();
-      document.removeEventListener('keydown', onEscPress);
-    });
+    window.dialog.closeDialog(window.pin.removeActivePinClass);
   });
 
   dialogClose.addEventListener('keydown', function (evt) {
     if (window.utils.isEnterPressed(evt)) {
-      window.dialog.closeDialog(function () {
-        window.pin.removeActivePinClass();
-        document.removeEventListener('keydown', onEscPress);
-      });
+      window.dialog.closeDialog(window.pin.removeActivePinClass);
     }
   });
 
@@ -50,9 +31,7 @@
 
     for (var i = 0; i < adverts.length; i++) {
       fragment.appendChild(window.pin.getPin(adverts[i], function (advert) {
-        window.dialog.openDialog(advert, function () {
-          document.addEventListener('keydown', onEscPress);
-        });
+        window.dialog.openDialog(advert);
       }));
     }
     pinMap.appendChild(fragment);
