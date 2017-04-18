@@ -1,6 +1,6 @@
 'use strict';
 
-window.dialog = (function () {
+window.openDialog = (function () {
 
   /**
    * @const {Object<string, string>}
@@ -10,6 +10,8 @@ window.dialog = (function () {
     'bungalo': 'Бунгало',
     'house': 'Дом'
   };
+
+  var currentCallback = null;
 
   /**
    * @type {DocumentFragment}
@@ -53,6 +55,15 @@ window.dialog = (function () {
 
   var dialog = document.querySelector('.dialog');
 
+  var closeDialog = function () {
+    window.utils.toggleHidden(dialog, true);
+    document.removeEventListener('keydown', onEscPress);
+
+    if (typeof currentCallback === 'function') {
+      currentCallback();
+    }
+  };
+
   /**
    * The handler that closes the dialog panel when the escape key is pressed
    * @param {KeyboardEvent} evt
@@ -63,11 +74,17 @@ window.dialog = (function () {
     }
   };
 
-  var closeDialog = function (callback) {
-    window.utils.toggleHidden(dialog, true);
-    document.removeEventListener('keydown', onEscPress);
-    callback();
-  };
+  var dialogClose = document.querySelector('.dialog__close');
+
+  dialogClose.addEventListener('click', function (evt) {
+    closeDialog();
+  });
+
+  dialogClose.addEventListener('keydown', function (evt) {
+    if (window.utils.isEnterPressed(evt)) {
+      closeDialog();
+    }
+  });
 
   /**
    * Adds a dialog item to the page
@@ -79,17 +96,18 @@ window.dialog = (function () {
     document.querySelector('.dialog__title img').src = advert.author.avatar;
   };
 
-  return {
-    /**
-     * @param  {Object} advert
-     * @param  {Function} callback
-     */
-    openDialog: function (advert) {
-      window.utils.toggleHidden(dialog, false);
-      renderDialog(advert);
-      document.addEventListener('keydown', onEscPress);
-    },
-    closeDialog: closeDialog
+  /**
+   * @param  {Object} advert
+   * @param  {Function} callback
+   */
+  var openDialog = function (advert, callback) {
+    window.utils.toggleHidden(dialog, false);
+    renderDialog(advert);
+    document.addEventListener('keydown', onEscPress);
+
+    currentCallback = callback;
   };
+
+  return openDialog;
 
 })();
