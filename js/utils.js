@@ -6,7 +6,7 @@ window.utils = (function () {
    * Keyboard key codes
    * @enum {number}
    */
-  var KeyCodes = {
+  var KeyCode = {
     ENTER: 13,
     ESC: 27
   };
@@ -28,7 +28,7 @@ window.utils = (function () {
      * @return {boolean}
      */
     isEnterPressed: function (evt) {
-      return evt.keyCode === KeyCodes.ENTER;
+      return evt.keyCode === KeyCode.ENTER;
     },
 
     /**
@@ -36,7 +36,7 @@ window.utils = (function () {
      * @return {boolean}
      */
     isEscapePressed: function (evt) {
-      return evt.keyCode === KeyCodes.ESC;
+      return evt.keyCode === KeyCode.ESC;
     },
 
     /**
