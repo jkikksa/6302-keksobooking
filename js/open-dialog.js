@@ -100,14 +100,12 @@ window.openDialog = (function () {
    * @param  {Object} advert
    * @param  {Function} callback
    */
-  var openDialog = function (advert, callback) {
+  return function (advert, callback) {
     window.utils.toggleHidden(dialog, false);
     renderDialog(advert);
     document.addEventListener('keydown', onEscPress);
 
     currentCallback = callback;
   };
-
-  return openDialog;
 
 })();

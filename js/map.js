@@ -26,4 +26,36 @@
   };
 
   renderPins(advertsList);
+
+  /**
+   * Gets the coordinates of the pin
+   * @param  {Element} pin
+   * @return {Object}
+   */
+  var getPinPosition = function (pin) {
+    return {
+      posX: pin.offsetLeft + pin.clientWidth / 2,
+      posY: pin.offsetTop + pin.clientHeight
+    };
+  };
+
+  /**
+   * Format the coordinates of the pin
+   * @param  {Element} pin
+   * @return {string}
+   */
+  var getFormatedPosition = function (pin) {
+    return 'x: ' + getPinPosition(pin).posX + ' ' + 'y: ' + getPinPosition(pin).posY;
+  };
+
+  var pinMain = document.querySelector('.pin__main');
+  var address = document.querySelector('#address');
+
+  address.readOnly = true;
+  address.value = getFormatedPosition(pinMain);
+
+  window.makeDraggable(pinMain, pinMain, function (pin) {
+    address.value = getFormatedPosition(pin);
+  });
+
 })();

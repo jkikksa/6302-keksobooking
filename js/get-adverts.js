@@ -98,7 +98,7 @@ window.getAdverts = (function () {
    * @param {number} avdertsAmount Amount of adverts
    * @return {Array<Object>}
    */
-  var getAdverts = function (avdertsAmount) {
+  return function (avdertsAmount) {
     var advertsList = [];
 
     for (var i = 0; i < avdertsAmount; i++) {
@@ -107,6 +107,4 @@ window.getAdverts = (function () {
 
     return advertsList;
   };
-
-  return getAdverts;
 })();
