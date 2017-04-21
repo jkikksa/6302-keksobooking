@@ -28,6 +28,12 @@
   renderPins(advertsList);
 
   /**
+   * The offset of the image in the parent block
+   * @const {number}
+   */
+  var PIN_IMAGE_OFFSET = 4;
+
+  /**
    * Gets the coordinates of the pin
    * @param  {Element} pin
    * @return {Object}
@@ -35,7 +41,7 @@
   var getPinPosition = function (pin) {
     return {
       posX: pin.offsetLeft + pin.clientWidth / 2,
-      posY: pin.offsetTop + pin.clientHeight
+      posY: pin.offsetTop + pin.clientHeight - PIN_IMAGE_OFFSET
     };
   };
 
@@ -44,18 +50,18 @@
    * @param  {Element} pin
    * @return {string}
    */
-  var getFormatedPosition = function (pin) {
-    return 'x: ' + getPinPosition(pin).posX + ' ' + 'y: ' + getPinPosition(pin).posY;
+  var getFormattedPosition = function (pin) {
+    return 'x: ' + Math.round(getPinPosition(pin).posX) + ' ' + 'y: ' + Math.round(getPinPosition(pin).posY);
   };
 
   var pinMain = document.querySelector('.pin__main');
   var address = document.querySelector('#address');
 
   address.readOnly = true;
-  address.value = getFormatedPosition(pinMain);
+  address.value = getFormattedPosition(pinMain);
 
-  window.makeDraggable(pinMain, pinMain, function (pin) {
-    address.value = getFormatedPosition(pin);
+  window.makeDraggable(pinMain, pinMain, document.querySelector('.tokyo'), function (pin) {
+    address.value = getFormattedPosition(pin);
   });
 
 })();

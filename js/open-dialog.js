@@ -11,7 +11,10 @@ window.openDialog = (function () {
     'house': 'Дом'
   };
 
-  var currentCallback = null;
+  /**
+   * @type {Function}
+   */
+  var _callback = null;
 
   /**
    * @type {DocumentFragment}
@@ -59,8 +62,8 @@ window.openDialog = (function () {
     window.utils.toggleHidden(dialog, true);
     document.removeEventListener('keydown', onEscPress);
 
-    if (typeof currentCallback === 'function') {
-      currentCallback();
+    if (typeof _callback === 'function') {
+      _callback();
     }
   };
 
@@ -105,7 +108,7 @@ window.openDialog = (function () {
     renderDialog(advert);
     document.addEventListener('keydown', onEscPress);
 
-    currentCallback = callback;
+    _callback = callback;
   };
 
 })();
