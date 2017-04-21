@@ -1,6 +1,7 @@
 'use strict';
 
 window.makeDraggable = (function () {
+
   /**
    * @type {Element}
    */
@@ -80,7 +81,6 @@ window.makeDraggable = (function () {
     if (typeof _callback === 'function') {
       _callback(_element);
     }
-
 
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
