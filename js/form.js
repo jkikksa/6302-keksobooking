@@ -18,8 +18,8 @@
     'timein_14': 'timeout_14'
   };
 
-  timeIn.addEventListener('change', function (evt) {
-    timeOut.value = TIMES_MAP[timeIn.value];
+  window.synchronizeFields(timeIn, timeOut, TIMES_MAP, function (input, value) {
+    input.value = value;
   });
 
   /**
@@ -33,8 +33,8 @@
 
   price.min = PRICES_MAP[type.value];
 
-  type.addEventListener('change', function (evt) {
-    price.min = PRICES_MAP[type.value];
+  window.synchronizeFields(type, price, PRICES_MAP, function (input, value) {
+    input.min = value;
   });
 
   /**
@@ -46,8 +46,8 @@
     'rooms_100': 'guest_3'
   };
 
-  roomNumber.addEventListener('change', function (evt) {
-    capacity.value = CAPACITY_MAP[roomNumber.value];
+  window.synchronizeFields(roomNumber, capacity, CAPACITY_MAP, function (input, value) {
+    input.value = value;
   });
 
   form.addEventListener('invalid', function (evt) {
