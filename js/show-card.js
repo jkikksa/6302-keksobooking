@@ -1,6 +1,6 @@
 'use strict';
 
-window.openDialog = (function () {
+window.showCard = (function () {
 
   /**
    * @const {Object<string, string>}

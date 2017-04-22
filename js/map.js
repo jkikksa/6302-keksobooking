@@ -19,7 +19,7 @@
 
     for (var i = 0; i < adverts.length; i++) {
       fragment.appendChild(window.pin.getPin(adverts[i], function (advert) {
-        window.openDialog(advert, window.pin.removeActivePinClass);
+        window.showCard(advert, window.pin.removeActivePinClass);
       }));
     }
     pinMap.appendChild(fragment);
