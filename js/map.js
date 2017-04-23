@@ -3,17 +3,9 @@
 (function () {
 
   /**
-   * @const {number}
+   * @param  {Array<Object>} adverts
    */
-  var ADVERTS_AMOUNT = 8;
-
-  var advertsList = window.getAdverts(ADVERTS_AMOUNT);
-
-  /**
-   * Adds pins to the page
-   * @param {Array<Object>} adverts
-   */
-  var renderPins = function (adverts) {
+  var onLoad = function (adverts) {
     var pinMap = document.querySelector('.tokyo__pin-map');
     var fragment = document.createDocumentFragment();
 
@@ -25,7 +17,7 @@
     pinMap.appendChild(fragment);
   };
 
-  renderPins(advertsList);
+  window.load('https://intensive-javascript-server-kjgvxfepjl.now.sh/keksobooking/data', onLoad);
 
   /**
    * The offset of the image in the parent block
