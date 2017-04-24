@@ -37,40 +37,17 @@
     return guests.value === 'any' ? true : advert.offer.guests === +guests.value;
   };
 
-  // var isArraysEqual = function (array1, array2) {
-  //
-  //   if (array1.length !== array2.length) {
-  //     return false;
-  //   }
-  //   for (var i = 0; i < array1.length; i++) {
-  //     if (array1[i] !== array2[i]) {
-  //       return false;
-  //     }
-  //   }
-  //   return true;
-  // };
-
   var featuresFilter = function (advert) {
     var checked = filters.querySelectorAll('.feature input:checked');
-    var featuresList = advert.offer.features;
+    var features = [];
 
+    for (var i = 0; i < checked.length; i++) {
+      features.push(checked[i].value);
+    }
 
-    };
-
-    // var features = [];
-    // for (var i = 0; i < checked.length; i++) {
-    // //   return ~advert.offer.features.indexOf(checked[i].value);
-    //
-    //   features.push(checked[i].value);
-    // }
-    //
-    // for (i = 0; i < advert.offer.features.length; i++) {
-    //   return ~features.indexOf(advert.offer.features[i]);
-    // }
-    //
-    // return false;
-
-    // return isArraysEqual(features, advert.offer.features);
+    return features.every(function (it) {
+      return ~advert.offer.features.indexOf(it);
+    });
   };
 
   var currentAdverts;
