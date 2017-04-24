@@ -39,14 +39,9 @@
 
   var featuresFilter = function (advert) {
     var checked = filters.querySelectorAll('.feature input:checked');
-    var features = [];
 
-    for (var i = 0; i < checked.length; i++) {
-      features.push(checked[i].value);
-    }
-
-    return features.every(function (it) {
-      return ~advert.offer.features.indexOf(it);
+    return Array.prototype.slice.call(checked, 0).every(function (it) {
+      return ~advert.offer.features.indexOf(it.value);
     });
   };
 
