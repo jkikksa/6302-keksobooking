@@ -10,22 +10,22 @@ window.load = (function () {
   return function (url, onLoad) {
     var xhr = new XMLHttpRequest();
 
+    var errorMap = {
+      400: 'Неверный запрос',
+      401: 'Требуется аутентификация',
+      404: 'Адрес не найден',
+      500: 'Ошибка сервера'
+    };
+
+    xhr.responseType = 'json';
+    xhr.open('GET', url);
+    xhr.timeout = 10000;
+
     xhr.addEventListener('load', function () {
-      switch (xhr.status) {
-        case 200:
-          onLoad(xhr.response);
-          break;
-        case 400:
-          window.modalError('Неверный запрос');
-          break;
-        case 401:
-          window.modalError('Требуется аутентификация');
-          break;
-        case 404:
-          window.modalError('Адрес не найден');
-          break;
-        default:
-          window.modalError('Что-то пошло не так');
+      if (xhr.status === 200) {
+        onLoad(xhr.response);
+      } else {
+        window.modalError(errorMap[xhr.status] || 'Неизвестная ошибка');
       }
     });
 
@@ -37,9 +37,6 @@ window.load = (function () {
       window.modalError('Превышено время ожидания');
     });
 
-    xhr.responseType = 'json';
-    xhr.open('GET', url);
-    xhr.timeout = 1000;
     xhr.send();
 
   };
