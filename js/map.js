@@ -1,20 +1,113 @@
 'use strict';
 
 (function () {
+  var filters = document.querySelector('.tokyo__filters');
+  var pinMap = document.querySelector('.tokyo__pin-map');
 
-  /**
-   * @param  {Array<Object>} adverts
-   */
-  var onLoad = function (adverts) {
-    var pinMap = document.querySelector('.tokyo__pin-map');
+  var typeFilter = function (advert) {
+    var type = filters.querySelector('#housing_type');
+
+    return type.value === 'any' ? true : advert.offer.type === type.value;
+  };
+
+  var priceFilter = function (advert) {
+    var price = filters.querySelector('#housing_price');
+
+    switch (price.value) {
+      case 'low':
+        return advert.offer.price <= 10000;
+      case 'middle':
+        return advert.offer.price > 10000 && advert.offer.price < 50000;
+      case 'high':
+        return advert.offer.price >= 50000;
+    }
+
+    return false;
+  };
+
+  var roomsFilter = function (advert) {
+    var rooms = filters.querySelector('#housing_room-number');
+
+    return rooms.value === 'any' ? true : advert.offer.rooms === +rooms.value;
+  };
+
+  var guestsFilter = function (advert) {
+    var guests = filters.querySelector('#housing_guests-number');
+
+    return guests.value === 'any' ? true : advert.offer.guests === +guests.value;
+  };
+
+  // var isArraysEqual = function (array1, array2) {
+  //
+  //   if (array1.length !== array2.length) {
+  //     return false;
+  //   }
+  //   for (var i = 0; i < array1.length; i++) {
+  //     if (array1[i] !== array2[i]) {
+  //       return false;
+  //     }
+  //   }
+  //   return true;
+  // };
+
+  var featuresFilter = function (advert) {
+    var checked = filters.querySelectorAll('.feature input:checked');
+    var featuresList = advert.offer.features;
+
+
+    };
+
+    // var features = [];
+    // for (var i = 0; i < checked.length; i++) {
+    // //   return ~advert.offer.features.indexOf(checked[i].value);
+    //
+    //   features.push(checked[i].value);
+    // }
+    //
+    // for (i = 0; i < advert.offer.features.length; i++) {
+    //   return ~features.indexOf(advert.offer.features[i]);
+    // }
+    //
+    // return false;
+
+    // return isArraysEqual(features, advert.offer.features);
+  };
+
+  var currentAdverts;
+
+  filters.addEventListener('change', function (evt) {
+    updateAdverts(currentAdverts);
+  });
+
+  var updateAdverts = function (adverts) {
+    var pins = pinMap.querySelectorAll('.pin:not(.pin__main)');
+
+    for (var i = 0; i < pins.length; i++) {
+      pinMap.removeChild(pins[i]);
+    }
+
     var fragment = document.createDocumentFragment();
 
-    for (var i = 0; i < adverts.length; i++) {
-      fragment.appendChild(window.pin.getPin(adverts[i], function (advert) {
+    var sortedAdverts = adverts
+      .filter(typeFilter)
+      .filter(priceFilter)
+      .filter(roomsFilter)
+      .filter(guestsFilter)
+      .filter(featuresFilter);
+
+    for (var i = 0; i < sortedAdverts.length; i++) {
+      fragment.appendChild(window.pin.getPin(sortedAdverts[i], function (advert) {
         window.showCard(advert, window.pin.removeActivePinClass);
       }));
     }
     pinMap.appendChild(fragment);
+  };
+  /**
+   * @param  {Array<Object>} adverts
+   */
+  var onLoad = function (adverts) {
+    currentAdverts = adverts;
+    updateAdverts(currentAdverts);
   };
 
   window.load('https://intensive-javascript-server-kjgvxfepjl.now.sh/keksobooking/data', onLoad);
