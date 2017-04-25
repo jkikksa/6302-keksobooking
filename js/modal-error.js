@@ -5,7 +5,7 @@ window.modalError = (function () {
   /**
    * @const {number}
    */
-  var DELAY = 3000;
+  var DELAY = 5000;
 
   /**
    * Shows a modal window and then hides it

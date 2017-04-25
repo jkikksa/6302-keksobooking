@@ -2,19 +2,18 @@
 
 (function () {
   var filters = document.querySelector('.tokyo__filters');
-  var currentAdverts;
+  var currentAdverts = null;
+  var filteredAdverts = null;
 
-  /**
-   * @param {Array<Object>} adverts
-   */
-  var updatePins = function (adverts) {
-    var filteredAdverts = window.filter(adverts);
+  var updatePins = function () {
+    filteredAdverts = window.filter(currentAdverts);
     window.pins.remove();
     window.pins.render(filteredAdverts);
   };
 
   filters.addEventListener('change', function () {
-    updatePins(currentAdverts);
+    window.debounce(updatePins);
+    // updatePins();
   });
 
   /**
