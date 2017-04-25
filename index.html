@@ -253,6 +253,11 @@
   </div>
 </footer>
 
+<div class="modal-error hidden">
+  <div class="modal-error__title">Ошибка при загрузке данных с сервера!</div>
+  <div class="modal-error__error-message"></div>
+</div>
+
 <template id="lodge-template">
   <div class="dialog__panel">
     <h3 class="lodge__title"></h3>
@@ -269,6 +274,8 @@
   </div>
 </template>
 <script src="js/utils.js"></script>
+<script src="js/modal-error.js"></script>
+<script src="js/load.js"></script>
 <script src="js/make-draggable.js"></script>
 <script src="js/synchronize-fields.js"></script>
 <script src="js/get-adverts.js"></script>
