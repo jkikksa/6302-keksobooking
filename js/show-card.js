@@ -32,6 +32,22 @@ window.showCard = (function () {
   };
 
   /**
+   * @param {string} photoURL
+   * @return {Element}
+   */
+  var generatePhotos = function (photoURL) {
+    var PHOTO_WIDTH = 52;
+    var PHOTO_HEIGHT = 42;
+
+    var img = document.createElement('img');
+    img.src = photoURL;
+    img.width = PHOTO_WIDTH;
+    img.height = PHOTO_HEIGHT;
+
+    return img;
+  };
+
+  /**
    * @param {Object} advertsItem
    * @return {Element}
    */
@@ -46,12 +62,17 @@ window.showCard = (function () {
     lodgeElement.querySelector('.lodge__checkin-time').textContent = 'Заезд после' + advertsItem.offer.checkin + ', выезд до ' + advertsItem.offer.checkout;
 
     var features = advertsItem.offer.features;
+    var photos = advertsItem.offer.photos;
 
     for (var i = 0; i < features.length; i++) {
       lodgeElement.querySelector('.lodge__features').appendChild(generateFeature(features[i]));
     }
 
     lodgeElement.querySelector('.lodge__description').textContent = advertsItem.offer.description;
+
+    for (var j = 0; j < photos.length; j++) {
+      lodgeElement.querySelector('.lodge__photos').appendChild(generatePhotos(photos[j]));
+    }
 
     return lodgeElement;
   };
