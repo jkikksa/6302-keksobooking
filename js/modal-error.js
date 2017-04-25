@@ -3,6 +3,11 @@
 window.modalError = (function () {
 
   /**
+   * @const {number}
+   */
+  var DELAY = 3000;
+
+  /**
    * Shows a modal window and then hides it
    * @param {string} errMessage Error text
    */
@@ -12,8 +17,8 @@ window.modalError = (function () {
     window.utils.toggleHidden(modal, false);
     message.textContent = errMessage;
 
-    setInterval(function () {
+    setTimeout(function () {
       window.utils.toggleHidden(modal, true);
-    }, 3000);
+    }, DELAY);
   };
 })();
