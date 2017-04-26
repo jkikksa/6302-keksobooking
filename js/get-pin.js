@@ -1,6 +1,6 @@
 'use strict';
 
-window.pin = (function () {
+window.getPin = (function () {
 
   /**
    * @const {string}
@@ -23,36 +23,12 @@ window.pin = (function () {
   var IMG_HEIGHT = 40;
 
   /**
-   * @const {string}
-   */
-  var PIN_ACTIVE_CLASS = 'pin--active';
-
-  /**
-   * Removes the class from the active pin element
-   */
-  var removeActivePinClass = function () {
-    var activePin = document.querySelector('.pin--active');
-    if (activePin) {
-      activePin.classList.remove(PIN_ACTIVE_CLASS);
-    }
-  };
-
-  /**
-   * Adds behavior for the pin
-   * @param  {Element} pin
-   */
-  var setPinActive = function (pin) {
-    removeActivePinClass();
-    pin.classList.add(PIN_ACTIVE_CLASS);
-  };
-
-  /**
    * Creates a pin based on the object parameters
    * @param {Object} advert
    * @param {Function} callback
    * @return {Element}
    */
-  var getPin = function (advert, callback) {
+  return function (advert, callback) {
     var pin = document.createElement('div');
     var img = document.createElement('img');
 
@@ -67,23 +43,16 @@ window.pin = (function () {
     pin.appendChild(img);
 
     pin.addEventListener('click', function (evt) {
-      setPinActive(pin);
-      callback(advert);
+      callback(advert, pin);
     });
 
     pin.addEventListener('keydown', function (evt) {
       if (window.utils.isEnterPressed(evt)) {
-        setPinActive(pin);
-        callback(advert);
+        callback(advert, pin);
       }
     });
 
     return pin;
-  };
-
-  return {
-    getPin: getPin,
-    removeActivePinClass: removeActivePinClass
   };
 
 })();

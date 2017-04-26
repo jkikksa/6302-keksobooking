@@ -12,7 +12,7 @@
   };
 
   filters.addEventListener('change', function () {
-    window.debounce(updatePins);
+    window.debounce(updatePins, 500);
   });
 
   /**

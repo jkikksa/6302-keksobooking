@@ -2,16 +2,16 @@
 
 window.debounce = (function () {
 
-  var DEBOUNCE_INTERVAL = 500;
   var lastTimeout;
 
   /**
    * @param {Function} func
+   * @param {number} interval
    */
-  return function (func) {
+  return function (func, interval) {
     if (lastTimeout) {
       window.clearTimeout(lastTimeout);
     }
-    lastTimeout = window.setTimeout(func, DEBOUNCE_INTERVAL);
+    lastTimeout = window.setTimeout(func, interval);
   };
 })();
