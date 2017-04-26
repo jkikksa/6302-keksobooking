@@ -13,7 +13,6 @@
 
   filters.addEventListener('change', function () {
     window.debounce(updatePins);
-    // updatePins();
   });
 
   /**

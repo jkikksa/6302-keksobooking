@@ -6,7 +6,6 @@ window.filter = (function () {
   var price = filters.querySelector('#housing_price');
   var rooms = filters.querySelector('#housing_room-number');
   var guests = filters.querySelector('#housing_guests-number');
-  var features = filters.querySelectorAll('.feature input');
 
   /**
    * @param {Object} advert
@@ -55,11 +54,9 @@ window.filter = (function () {
    * @return {boolean}
    */
   var featuresFilter = function (advert) {
-    var checkedFeatures = Array.prototype.filter.call(features, function (it) {
-      return it.checked;
-    });
+    var featuresChecked = filters.querySelectorAll('.feature input:checked');
 
-    return Array.prototype.every.call(checkedFeatures, function (it) {
+    return Array.prototype.every.call(featuresChecked, function (it) {
       return ~advert.offer.features.indexOf(it.value);
     });
   };
@@ -69,7 +66,12 @@ window.filter = (function () {
    * @return {Array<Object>}
    */
   return function (adverts) {
-    return adverts.filter(typeFilter).filter(priceFilter).filter(roomsFilter).filter(guestsFilter).filter(featuresFilter);
+    return adverts
+      .filter(typeFilter)
+      .filter(priceFilter)
+      .filter(roomsFilter)
+      .filter(guestsFilter)
+      .filter(featuresFilter);
   };
 
 })();
