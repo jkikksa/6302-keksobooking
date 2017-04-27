@@ -5,17 +5,17 @@ window.makeDraggable = (function () {
   /**
    * @type {Element}
    */
-  var _element = null;
+  var element = null;
 
   /**
    * @type {Element}
    */
-  var _area = null;
+  var area = null;
 
   /**
    * @type {Function}
    */
-  var _callback = null;
+  var callback = null;
 
   /**
    * @type {Object<string, number>}
@@ -43,28 +43,28 @@ window.makeDraggable = (function () {
       y: evt.clientY
     };
 
-    if (_element.offsetLeft - shift.x < 0) {
-      _element.style.left = 0;
+    if (element.offsetLeft - shift.x < 0) {
+      element.style.left = 0;
     }
 
-    if (_element.offsetLeft - shift.x > _area.clientWidth - _element.clientWidth) {
-      _element.style.left = _area.clientWidth - _element.clientWidth + 'px';
+    if (element.offsetLeft - shift.x > area.clientWidth - element.clientWidth) {
+      element.style.left = area.clientWidth - element.clientWidth + 'px';
     }
 
-    if (_element.offsetTop - shift.y < 0) {
-      _element.style.top = 0;
+    if (element.offsetTop - shift.y < 0) {
+      element.style.top = 0;
     }
 
-    if (_element.offsetTop - shift.y > _area.clientHeight - _element.clientHeight) {
-      _element.style.top = _area.clientHeight - _element.clientHeight + 'px';
+    if (element.offsetTop - shift.y > area.clientHeight - element.clientHeight) {
+      element.style.top = area.clientHeight - element.clientHeight + 'px';
     }
 
-    if (evt.clientX < _area.getBoundingClientRect().left || evt.clientX > _area.getBoundingClientRect().right || evt.clientY < _area.getBoundingClientRect().top || evt.clientY > _area.getBoundingClientRect().bottom) {
+    if (evt.clientX < area.getBoundingClientRect().left || evt.clientX > area.getBoundingClientRect().right || evt.clientY < area.getBoundingClientRect().top || evt.clientY > area.getBoundingClientRect().bottom) {
       stopMove();
     }
 
-    _element.style.top = (_element.offsetTop - shift.y) + 'px';
-    _element.style.left = (_element.offsetLeft - shift.x) + 'px';
+    element.style.top = (element.offsetTop - shift.y) + 'px';
+    element.style.left = (element.offsetLeft - shift.x) + 'px';
   };
 
   var stopMove = function () {
@@ -78,8 +78,8 @@ window.makeDraggable = (function () {
   var onMouseUp = function (evt) {
     evt.preventDefault();
 
-    if (typeof _callback === 'function') {
-      _callback(_element);
+    if (typeof callback === 'function') {
+      callback(element);
     }
 
     document.removeEventListener('mousemove', onMouseMove);
@@ -89,14 +89,14 @@ window.makeDraggable = (function () {
   /**
    * Makes element draggable.
    * @param {Element} handle The handle for which the element is dragged
-   * @param {Element} element What is dragged
-   * @param {Element} area Limited area for draggable events
-   * @param {Function} callback
+   * @param {Element} elem What is dragged
+   * @param {Element} zone Limited area for draggable events
+   * @param {Function} cb
    */
-  return function (handle, element, area, callback) {
-    _element = element;
-    _callback = callback;
-    _area = area;
+  return function (handle, elem, zone, cb) {
+    element = elem;
+    callback = cb;
+    area = zone;
 
     handle.addEventListener('mousedown', function (evt) {
       evt.preventDefault();

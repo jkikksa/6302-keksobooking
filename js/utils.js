@@ -11,15 +11,7 @@ window.utils = (function () {
     ESC: 27
   };
 
-  /**
-   * Get a random integer number between the minimum number and the maximum number (inclusive)
-   * @param {number} min
-   * @param {number} max
-   * @return {number}
-   */
-  var getRandomInt = function (min, max) {
-    return Math.floor(Math.random() * (max + 1 - min)) + min;
-  };
+  var lastTimeout;
 
   return {
 
@@ -40,26 +32,6 @@ window.utils = (function () {
     },
 
     /**
-    * Get a random item from an array
-    * @param {Array} array
-    * @return {*}
-    */
-    getRandomArrayItem: function (array) {
-      return array[getRandomInt(0, array.length - 1)];
-    },
-
-    /**
-     * Get a new random length array from the recieved array
-     * @param {Array} array
-     * @return {Array}
-     */
-    getRandomArray: function (array) {
-      return array.filter(function () {
-        return getRandomInt(0, 1) === 0;
-      });
-    },
-
-    /**
      * Toggle class 'hidden' in the element.
      * @param {Element} element The DOM element in which the class is toggled
      * @param {boolean} state If false - remove class, if true - add class.
@@ -68,6 +40,15 @@ window.utils = (function () {
       element.classList.toggle('hidden', state);
     },
 
-    getRandomInt: getRandomInt
+    /**
+     * @param {Function} func
+     * @param {number} interval
+     */
+    debounce: function (func, interval) {
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
+      }
+      lastTimeout = window.setTimeout(func, interval);
+    }
   };
 })();

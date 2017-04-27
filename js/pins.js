@@ -8,11 +8,12 @@ window.pins = (function () {
    */
   var PIN_ACTIVE_CLASS = 'pin--active';
 
+  var activePin = null;
+
   /**
    * Removes the class from the active pin element
    */
   var removeActivePinClass = function () {
-    var activePin = document.querySelector('.pin--active');
     if (activePin) {
       activePin.classList.remove(PIN_ACTIVE_CLASS);
     }
@@ -24,7 +25,7 @@ window.pins = (function () {
    */
   var setPinActive = function (pin) {
     removeActivePinClass();
-    pin.classList.add(PIN_ACTIVE_CLASS);
+    activePin = pin.classList.add(PIN_ACTIVE_CLASS);
   };
 
   return {

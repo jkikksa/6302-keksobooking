@@ -20,7 +20,6 @@ window.filter = (function () {
    * @return {boolean}
    */
   var priceFilter = function (advert) {
-
     switch (price.value) {
       case 'low':
         return advert.offer.price <= 10000;
