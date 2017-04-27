@@ -27,9 +27,7 @@ window.pins = (function () {
     pin.classList.add(PIN_ACTIVE_CLASS);
   };
 
-
   return {
-
     /**
      * @param {Array<Object>} adverts
      * @param {Function} callback
@@ -54,5 +52,4 @@ window.pins = (function () {
 
     removeActivePinClass: removeActivePinClass
   };
-
 })();

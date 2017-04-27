@@ -78,7 +78,10 @@ window.card = (function () {
   var closeDialog = function () {
     window.utils.toggleHidden(dialog, true);
     document.removeEventListener('keydown', onEscPress);
-    callback();
+
+    if (typeof callback === 'function') {
+      callback();
+    }
   };
 
   /**
