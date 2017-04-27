@@ -1,7 +1,6 @@
 'use strict';
 
 window.utils = (function () {
-
   /**
    * Keyboard key codes
    * @enum {number}
@@ -14,7 +13,6 @@ window.utils = (function () {
   var lastTimeout;
 
   return {
-
     /**
      * @param {KeyboardEvent} evt
      * @return {boolean}

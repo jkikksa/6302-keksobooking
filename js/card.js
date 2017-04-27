@@ -1,7 +1,6 @@
 'use strict';
 
-window.showCard = (function () {
-
+window.card = (function () {
   /**
    * @const {Object<string, string>}
    */
@@ -11,10 +10,7 @@ window.showCard = (function () {
     'house': 'Дом'
   };
 
-  /**
-   * @type {Function}
-   */
-  var _callback = null;
+  var callback = null;
 
   /**
    * @type {DocumentFragment}
@@ -82,10 +78,7 @@ window.showCard = (function () {
   var closeDialog = function () {
     window.utils.toggleHidden(dialog, true);
     document.removeEventListener('keydown', onEscPress);
-
-    if (typeof _callback === 'function') {
-      _callback();
-    }
+    callback();
   };
 
   /**
@@ -120,16 +113,18 @@ window.showCard = (function () {
     document.querySelector('.dialog__title img').src = advert.author.avatar;
   };
 
-  /**
-   * @param  {Object} advert
-   * @param  {Function} callback
-   */
-  return function (advert, callback) {
-    window.utils.toggleHidden(dialog, false);
-    renderDialog(advert);
-    document.addEventListener('keydown', onEscPress);
+  return {
+    /**
+     * @param  {Object} advert
+     * @param  {Function} cb
+     */
+    show: function (advert, cb) {
+      window.utils.toggleHidden(dialog, false);
+      renderDialog(advert);
+      document.addEventListener('keydown', onEscPress);
 
-    _callback = callback;
+      callback = cb;
+    },
+    close: closeDialog
   };
-
 })();

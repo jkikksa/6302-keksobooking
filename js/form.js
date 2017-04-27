@@ -95,8 +95,7 @@
   address.readOnly = true;
   address.value = getFormattedPosition(pinMain);
 
-  window.makeDraggable(pinMain, pinMain, document.querySelector('.tokyo'), function (pin) {
+  window.makeDraggable(pinMain, document.querySelector('.tokyo'), function (pin) {
     address.value = getFormattedPosition(pin);
   });
-
 })();

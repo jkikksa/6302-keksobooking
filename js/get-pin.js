@@ -1,7 +1,6 @@
 'use strict';
 
 window.getPin = (function () {
-
   /**
    * @const {string}
    */
@@ -54,5 +53,4 @@ window.getPin = (function () {
 
     return pin;
   };
-
 })();

@@ -8,7 +8,10 @@
   var updatePins = function () {
     filteredAdverts = window.filter(currentAdverts);
     window.pins.remove();
-    window.pins.render(filteredAdverts);
+    window.card.close();
+    window.pins.render(filteredAdverts, function (advert) {
+      window.card.show(advert, window.pins.removeActivePinClass);
+    });
   };
 
   filters.addEventListener('change', function () {
@@ -20,7 +23,9 @@
    */
   var onLoad = function (adverts) {
     currentAdverts = adverts;
-    window.pins.render(currentAdverts.slice(0, 3));
+    window.pins.render(currentAdverts.slice(0, 3), function (advert) {
+      window.card.show(advert, window.pins.removeActivePinClass);
+    });
   };
 
   window.load('https://intensive-javascript-server-kjgvxfepjl.now.sh/keksobooking/data', onLoad);

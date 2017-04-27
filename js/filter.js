@@ -72,5 +72,4 @@ window.filter = (function () {
       .filter(guestsFilter)
       .filter(featuresFilter);
   };
-
 })();
