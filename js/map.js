@@ -4,6 +4,7 @@
   var filters = document.querySelector('.tokyo__filters');
   var currentAdverts = null;
   var filteredAdverts = null;
+  window.card.close();
 
   var updatePins = function () {
     filteredAdverts = window.filter(currentAdverts);

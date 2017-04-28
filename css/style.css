@@ -662,7 +662,7 @@ select option:hover {
 
 .pin img:focus {
   outline: none;
-  box-shadow: 0 0 35px 15px #ff5635;
+  box-shadow: 0 0 15px 2px #ff5635;
 }
 
 .error {

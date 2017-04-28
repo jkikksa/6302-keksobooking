@@ -74,6 +74,7 @@ window.card = (function () {
   };
 
   var dialog = document.querySelector('.dialog');
+  var dialogClose = document.querySelector('.dialog__close');
 
   var closeDialog = function () {
     window.utils.toggleHidden(dialog, true);
@@ -94,18 +95,6 @@ window.card = (function () {
     }
   };
 
-  var dialogClose = document.querySelector('.dialog__close');
-
-  dialogClose.addEventListener('click', function (evt) {
-    closeDialog();
-  });
-
-  dialogClose.addEventListener('keydown', function (evt) {
-    if (window.utils.isEnterPressed(evt)) {
-      closeDialog();
-    }
-  });
-
   /**
    * Adds a dialog item to the page
    * @param {Object} advert
@@ -124,6 +113,17 @@ window.card = (function () {
     show: function (advert, cb) {
       window.utils.toggleHidden(dialog, false);
       renderDialog(advert);
+
+      dialogClose.addEventListener('click', function (evt) {
+        closeDialog();
+      });
+
+      dialogClose.addEventListener('keydown', function (evt) {
+        if (window.utils.isEnterPressed(evt)) {
+          closeDialog();
+        }
+      });
+
       document.addEventListener('keydown', onEscPress);
 
       callback = cb;
