@@ -1,7 +1,6 @@
 'use strict';
 
 window.load = (function () {
-
   /**
    * @const {Object<number, string>}
    */
@@ -46,6 +45,5 @@ window.load = (function () {
     });
 
     xhr.send();
-
   };
 })();

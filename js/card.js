@@ -1,7 +1,6 @@
 'use strict';
 
-window.showCard = (function () {
-
+window.card = (function () {
   /**
    * @const {Object<string, string>}
    */
@@ -11,10 +10,7 @@ window.showCard = (function () {
     'house': 'Дом'
   };
 
-  /**
-   * @type {Function}
-   */
-  var _callback = null;
+  var callback = null;
 
   /**
    * @type {DocumentFragment}
@@ -32,6 +28,22 @@ window.showCard = (function () {
   };
 
   /**
+   * @param {string} photoURL
+   * @return {Element}
+   */
+  var generatePhotos = function (photoURL) {
+    var PHOTO_WIDTH = 52;
+    var PHOTO_HEIGHT = 42;
+
+    var img = document.createElement('img');
+    img.src = photoURL;
+    img.width = PHOTO_WIDTH;
+    img.height = PHOTO_HEIGHT;
+
+    return img;
+  };
+
+  /**
    * @param {Object} advertsItem
    * @return {Element}
    */
@@ -46,6 +58,7 @@ window.showCard = (function () {
     lodgeElement.querySelector('.lodge__checkin-time').textContent = 'Заезд после' + advertsItem.offer.checkin + ', выезд до ' + advertsItem.offer.checkout;
 
     var features = advertsItem.offer.features;
+    var photos = advertsItem.offer.photos;
 
     for (var i = 0; i < features.length; i++) {
       lodgeElement.querySelector('.lodge__features').appendChild(generateFeature(features[i]));
@@ -53,17 +66,22 @@ window.showCard = (function () {
 
     lodgeElement.querySelector('.lodge__description').textContent = advertsItem.offer.description;
 
+    for (var j = 0; j < photos.length; j++) {
+      lodgeElement.querySelector('.lodge__photos').appendChild(generatePhotos(photos[j]));
+    }
+
     return lodgeElement;
   };
 
   var dialog = document.querySelector('.dialog');
+  var dialogClose = document.querySelector('.dialog__close');
 
   var closeDialog = function () {
     window.utils.toggleHidden(dialog, true);
     document.removeEventListener('keydown', onEscPress);
 
-    if (typeof _callback === 'function') {
-      _callback();
+    if (typeof callback === 'function') {
+      callback();
     }
   };
 
@@ -77,18 +95,6 @@ window.showCard = (function () {
     }
   };
 
-  var dialogClose = document.querySelector('.dialog__close');
-
-  dialogClose.addEventListener('click', function (evt) {
-    closeDialog();
-  });
-
-  dialogClose.addEventListener('keydown', function (evt) {
-    if (window.utils.isEnterPressed(evt)) {
-      closeDialog();
-    }
-  });
-
   /**
    * Adds a dialog item to the page
    * @param {Object} advert
@@ -99,16 +105,29 @@ window.showCard = (function () {
     document.querySelector('.dialog__title img').src = advert.author.avatar;
   };
 
-  /**
-   * @param  {Object} advert
-   * @param  {Function} callback
-   */
-  return function (advert, callback) {
-    window.utils.toggleHidden(dialog, false);
-    renderDialog(advert);
-    document.addEventListener('keydown', onEscPress);
+  return {
+    /**
+     * @param  {Object} advert
+     * @param  {Function} cb
+     */
+    show: function (advert, cb) {
+      window.utils.toggleHidden(dialog, false);
+      renderDialog(advert);
 
-    _callback = callback;
+      dialogClose.addEventListener('click', function (evt) {
+        closeDialog();
+      });
+
+      dialogClose.addEventListener('keydown', function (evt) {
+        if (window.utils.isEnterPressed(evt)) {
+          closeDialog();
+        }
+      });
+
+      document.addEventListener('keydown', onEscPress);
+
+      callback = cb;
+    },
+    close: closeDialog
   };
-
 })();
