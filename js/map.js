@@ -4,6 +4,8 @@
   var filters = document.querySelector('.tokyo__filters');
   var currentAdverts = null;
   var filteredAdverts = null;
+  var DEBOUNCE_INTERVAL = 500;
+
   window.card.close();
 
   var updatePins = function () {
@@ -16,7 +18,7 @@
   };
 
   filters.addEventListener('change', function () {
-    window.utils.debounce(updatePins, 500);
+    window.utils.debounce(updatePins, DEBOUNCE_INTERVAL);
   });
 
   /**

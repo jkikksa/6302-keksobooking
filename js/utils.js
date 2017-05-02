@@ -10,7 +10,7 @@ window.utils = (function () {
     ESC: 27
   };
 
-  var lastTimeout;
+  var lastTimeout = null;
 
   return {
     /**
@@ -43,7 +43,7 @@ window.utils = (function () {
      * @param {number} interval
      */
     debounce: function (func, interval) {
-      if (lastTimeout) {
+      if (lastTimeout !== null) {
         window.clearTimeout(lastTimeout);
       }
       lastTimeout = window.setTimeout(func, interval);

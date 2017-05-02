@@ -14,7 +14,7 @@ window.pins = (function () {
    * Removes the class from the active pin element
    */
   var removeActivePinClass = function () {
-    if (activePin) {
+    if (activePin !== null) {
       activePin.classList.remove(PIN_ACTIVE_CLASS);
       activePin = null;
     }
@@ -30,6 +30,8 @@ window.pins = (function () {
     activePin = pin;
   };
 
+  var renderedPins = [];
+
   return {
     /**
      * @param {Array<Object>} adverts
@@ -37,20 +39,25 @@ window.pins = (function () {
      */
     render: function (adverts, callback) {
       var fragment = document.createDocumentFragment();
-      for (var i = 0; i < adverts.length; i++) {
-        fragment.appendChild(window.getPin(adverts[i], function (advert, pin) {
+
+      renderedPins = adverts.map(function (it) {
+        var pinElement = window.pin.create(it, function (advert, pin) {
           setPinActive(pin);
           callback(advert);
-        }));
-      }
+        });
+        fragment.appendChild(pinElement);
+        return pinElement;
+      });
+
       pinMap.appendChild(fragment);
     },
 
     remove: function () {
-      var pins = pinMap.querySelectorAll('.pin:not(.pin__main)');
-      for (var i = 0; i < pins.length; i++) {
-        pinMap.removeChild(pins[i]);
-      }
+      renderedPins.forEach(function (it) {
+        pinMap.removeChild(it);
+        it.remove();
+      });
+      renderedPins.length = 0;
     },
 
     removeActivePinClass: removeActivePinClass
