@@ -41,12 +41,13 @@ window.pins = (function () {
       var fragment = document.createDocumentFragment();
 
       renderedPins = adverts.map(function (it) {
-        var pinElement = window.pin.create(it, function (advert, pin) {
-          setPinActive(pin);
+        var pin = new window.Pin(it, function (advert, pinItem) {
+          setPinActive(pinItem);
           callback(advert);
         });
-        fragment.appendChild(pinElement);
-        return pinElement;
+
+        fragment.appendChild(pin.element);
+        return pin;
       });
 
       pinMap.appendChild(fragment);
@@ -54,7 +55,7 @@ window.pins = (function () {
 
     remove: function () {
       renderedPins.forEach(function (it) {
-        pinMap.removeChild(it);
+        pinMap.removeChild(it.element);
         it.remove();
       });
       renderedPins.length = 0;
